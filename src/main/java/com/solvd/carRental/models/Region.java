@@ -5,6 +5,14 @@ public class Region {
 	private String name;
 	private Country country;
 	
+	public Region () {}
+	
+	public Region(Long id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
+
 	public Region(Long id, String name, Country country) {
 		this.id = id;
 		this.name = name;

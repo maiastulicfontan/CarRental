@@ -9,6 +9,8 @@ public class CarRentalCompany {
 	private List<Location> locations = new ArrayList<Location>();
 	
 	
+	public CarRentalCompany () {}
+	
 	public CarRentalCompany(Long id, String name) {
 		this.id = id;
 		this.name = name;

@@ -5,6 +5,8 @@ public class CarType {
 	private String name;
 	private String description;
 	
+	public CarType() {}
+	
 	public CarType(Long id, String name) {
 		this.id = id;
 		this.name = name;

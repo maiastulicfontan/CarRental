@@ -1,21 +1,29 @@
 package com.solvd.carRental.models;
 
 public class SpecialService {
-	private long id;
+	private Long id;
 	private String name;
 	private SpecialServiceType type;
 	
-	public SpecialService(long id, String name, SpecialServiceType type) {
+	public SpecialService() {}
+	
+	public SpecialService(Long id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
+
+	public SpecialService(Long id, String name, SpecialServiceType type) {
 		this.id = id;
 		this.name = name;
 		this.type = type;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

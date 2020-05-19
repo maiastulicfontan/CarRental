@@ -9,12 +9,16 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.solvd.carRental.connectionpool.ConnectionPool;
-import com.solvd.carRental.dao.ICarTypeDAO;
+import com.solvd.carRental.dao.IEntityDAO;
 import com.solvd.carRental.models.CarType;
 
-public class CarTypeDAO implements ICarTypeDAO {
-	
-private final static Logger LOGGER = LogManager.getLogger(CarTypeDAO.class);
+public class CarTypeDAO implements IEntityDAO<CarType> {
+	private final static Logger LOGGER = LogManager.getLogger(CarTypeDAO.class);
+	private final static String GET_BY_ID = "select * from Car_Types where id = ?";
+	private final static String GET_ALL = "select * from Car_Types";
+	private final static String INSERT = "insert into Car_Types (id, name, description) values(?, ?, ?)";
+	private final static String UPDATE = "update Car_Types set name = ?, description = ?  where id = ?";
+	private final static String DELETE = "delete from Car_Types where id = ?";
 	
 	@Override
 	public CarType getEntityById(Long id) {	
@@ -23,9 +27,9 @@ private final static Logger LOGGER = LogManager.getLogger(CarTypeDAO.class);
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement("select * from Car_Types where id = ?");
+			ps = c.prepareStatement(GET_BY_ID);
 			ps.setLong(1, id);
 			rs = ps.executeQuery();
 			rs.next();
@@ -62,9 +66,9 @@ private final static Logger LOGGER = LogManager.getLogger(CarTypeDAO.class);
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement("select * from Car_Types where id = ?");
+			ps = c.prepareStatement(GET_ALL);
 			rs = ps.executeQuery();
 			List <CarType> carTypes = new ArrayList<CarType>();
 			while (rs.next()) {
@@ -97,14 +101,14 @@ private final static Logger LOGGER = LogManager.getLogger(CarTypeDAO.class);
 	}
 	
 	@Override
-	public void updateEntityById(CarType carType) {	
+	public void updateEntity(CarType carType) {	
 		ConnectionPool cp = ConnectionPool.getInstance();
 		Connection c = null;
 		PreparedStatement ps = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement("update Car_Types set name = ?, description = ?  where id = ?");
+			ps = c.prepareStatement(UPDATE);
 			ps.setString(1, carType.getName());
 			ps.setString(2, carType.getDescription());
 			ps.setLong(3, carType.getId());
@@ -133,9 +137,9 @@ private final static Logger LOGGER = LogManager.getLogger(CarTypeDAO.class);
 		Connection c = null;
 		PreparedStatement ps = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement("insert into Car_Types (id, name, description) values(?, ?, ?)");
+			ps = c.prepareStatement(INSERT);
 			ps.setLong(1, carType.getId());
 			ps.setString(2, carType.getName());
 			ps.setString(3, carType.getDescription());
@@ -164,9 +168,10 @@ private final static Logger LOGGER = LogManager.getLogger(CarTypeDAO.class);
 		Connection c = null;
 		PreparedStatement ps = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement("delete from Car_Types where id = ?");
+			ps = c.prepareStatement(DELETE);
+			ps.setLong(1, id);
 			ps.executeUpdate();
 		} catch (ClassNotFoundException e) {
 			LOGGER.error(e);

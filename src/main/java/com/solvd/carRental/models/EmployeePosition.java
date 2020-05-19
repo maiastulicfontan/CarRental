@@ -7,12 +7,22 @@ public class EmployeePosition {
 	private Double salary;
 	private Department department;
 	
+	public EmployeePosition () {}
+	
 	public EmployeePosition(Long id, String name, Department department) {
 		this.id = id;
 		this.name = name;
 		this.department = department;
 	}
 	
+	public EmployeePosition(Long id, String name, String description, Double salary) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.salary = salary;
+	}
+
 	public EmployeePosition(Long id, String name, String description, Double salary, Department department) {
 		super();
 		this.id = id;

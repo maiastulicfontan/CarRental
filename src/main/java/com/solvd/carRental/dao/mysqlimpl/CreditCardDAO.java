@@ -12,8 +12,13 @@ import com.solvd.carRental.connectionpool.ConnectionPool;
 import com.solvd.carRental.dao.ICreditCardDAO;
 import com.solvd.carRental.models.CreditCard;
 
-public class CreditCardDAO implements ICreditCardDAO {
+public class CreditCardDAO implements ICreditCardDAO{
 	private final static Logger LOGGER = LogManager.getLogger(CreditCardDAO.class);
+	private final static String GET_BY_ID = "select * from Credit_Cards where id = ?";
+	private final static String GET_ALL = "select * from Credit_Cards";
+	private final static String INSERT = "insert into Credit_Cards (id, number, valid_from, expiration) values(?, ?, ?, ?)";
+	private final static String UPDATE = "update Credit_Cards set number = ?, valid_from = ?, expiration = ?  where id = ?";
+	private final static String DELETE = "delete from Credit_Cards where id = ?";
 	
 	@Override
 	public CreditCard getEntityById(Long id) {	
@@ -22,9 +27,9 @@ public class CreditCardDAO implements ICreditCardDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement("select * from Credit_Cards where id = ?");
+			ps = c.prepareStatement(GET_BY_ID);
 			ps.setLong(1, id);
 			rs = ps.executeQuery();
 			rs.next();
@@ -62,19 +67,21 @@ public class CreditCardDAO implements ICreditCardDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement("select * from Credit_Cards");
+			ps = c.prepareStatement(GET_ALL);
 			rs = ps.executeQuery();
 			List <CreditCard> creditCards = new ArrayList<CreditCard>();
-			while (rs.next()) {
-				CreditCard creditCard = new CreditCard (
-						rs.getLong("id"),
-						rs.getInt("number"),
-						rs.getString("valid_from"),
-						rs.getString("expiration")
-						);
-				creditCards.add(creditCard);
+			if (rs.next()) {
+				while (rs.next()) {
+					CreditCard creditCard = new CreditCard (
+							rs.getLong("id"),
+							rs.getInt("number"),
+							rs.getString("valid_from"),
+							rs.getString("expiration")
+							);
+					creditCards.add(creditCard);
+				}
 			}
 			return creditCards;
 		} catch (ClassNotFoundException e) {
@@ -98,14 +105,14 @@ public class CreditCardDAO implements ICreditCardDAO {
 	}
 	
 	@Override
-	public void updateEntityById(CreditCard creditCard) {	
+	public void updateEntity(CreditCard creditCard) {	
 		ConnectionPool cp = ConnectionPool.getInstance();
 		Connection c = null;
 		PreparedStatement ps = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement("update Credit_Cards set number = ?, valid_from = ?, expiration = ?  where id = ?");
+			ps = c.prepareStatement(UPDATE);
 			ps.setInt(1, creditCard.getNumber());
 			ps.setString(2, creditCard.getValidFrom());
 			ps.setString(3, creditCard.getExpiration());
@@ -135,9 +142,9 @@ public class CreditCardDAO implements ICreditCardDAO {
 		Connection c = null;
 		PreparedStatement ps = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement("insert into Credit_Cards (id, number, valid_from, expiration) values(?, ?, ?, ?)");
+			ps = c.prepareStatement(INSERT);
 			ps.setLong(1, creditCard.getId());
 			ps.setInt(2, creditCard.getNumber());
 			ps.setString(3, creditCard.getValidFrom());
@@ -167,9 +174,10 @@ public class CreditCardDAO implements ICreditCardDAO {
 		Connection c = null;
 		PreparedStatement ps = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement("delete from Credit_Cards where id = ?");
+			ps = c.prepareStatement(DELETE);
+			ps.setLong(1, id);
 			ps.executeUpdate();
 		} catch (ClassNotFoundException e) {
 			LOGGER.error(e);
@@ -189,26 +197,25 @@ public class CreditCardDAO implements ICreditCardDAO {
 		}
 	}
 	
-	public List<CreditCard> getAllByCustomerId(Long customerId) {	
+	public List<CreditCard> getAllByCustomerId(Long id) {
 		ConnectionPool cp = ConnectionPool.getInstance();
 		Connection c = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement("select * from Credit_Cards where customer_id = ?");
-			ps.setLong(1, customerId);
+			ps.setLong(1, id);
 			rs = ps.executeQuery();
-			rs.next();
 			List <CreditCard> creditCards = new ArrayList<CreditCard>();
 			while (rs.next()) {
 				CreditCard creditCard = new CreditCard (
-						rs.getLong("id"),
-						rs.getInt("number"),
-						rs.getString("valid_from"),
-						rs.getString("expiration")
-						);
+				rs.getLong("id"),
+				rs.getInt("number"),
+				rs.getString("valid_from"),
+				rs.getString("expiration")
+				);
 				creditCards.add(creditCard);
 			}
 			return creditCards;

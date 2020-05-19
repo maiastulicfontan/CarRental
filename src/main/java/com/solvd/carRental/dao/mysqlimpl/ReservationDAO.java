@@ -4,25 +4,24 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.solvd.carRental.connectionpool.ConnectionPool;
 import com.solvd.carRental.dao.IEntityDAO;
-import com.solvd.carRental.models.CarBrand;
+import com.solvd.carRental.models.Reservation;
 
-public class CarBrandDAO implements IEntityDAO<CarBrand>{
-	private final static Logger LOGGER = LogManager.getLogger(CarBrandDAO.class);
-	private final static String GET_BY_ID = "select * from Car_Brands where id = ?";
-	private final static String GET_ALL = "select * from Car_Brands";
-	private final static String INSERT = "insert into Car_Brands (name) values(?)";
-	private final static String UPDATE = "update Car_Brands set name = ?  where id = ?";
-	private final static String DELETE = "delete from Car_Brands where id = ?";
+public class ReservationDAO implements IEntityDAO<Reservation> {
+	private final static Logger LOGGER = LogManager.getLogger(CarModelDAO.class);
+	private final static String GET_BY_ID = "select * from Reservations where id = ?";
+	private final static String GET_ALL = "select * from Reservations";
+	private final static String INSERT = "insert into Reservations (id, pickupDateTime , returnDateTime, cost, confirmation_number, creation_date) values(?, ?, ?, ?, ?, ?)";
+	private final static String UPDATE = "update Reservations set pickupDateTime = ?, returnDateTime = ?, cost = ?, confirmation_number = ?, creation_date = ?  where id = ?";
+	private final static String DELETE = "delete from Reservations where id = ?";
 	
 	@Override
-	public CarBrand getEntityById(Long id) {	
+	public Reservation getEntityById(Long id) {	
 		ConnectionPool cp = ConnectionPool.getInstance();
 		Connection c = null;
 		PreparedStatement ps = null;
@@ -34,11 +33,15 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 			ps.setLong(1, id);
 			rs = ps.executeQuery();
 			rs.next();
-			CarBrand carBrand = new CarBrand (
+			Reservation reservation = new Reservation (
 					rs.getLong("id"),
-					rs.getString("name")
+					rs.getTimestamp("pickup_date_time"),
+					rs.getTimestamp("return_date_time"),
+					rs.getDouble("cost"),
+					rs.getLong("confirmation_number"),
+					rs.getDate("creation_date")
 					);
-			return carBrand;
+			return reservation;
 		} catch (ClassNotFoundException e) {
 			LOGGER.error(e);
 		} catch (InterruptedException e) {
@@ -60,7 +63,7 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 	}
 	
 	@Override
-	public List<CarBrand> getAll() {
+	public List<Reservation> getAll() {
 		ConnectionPool cp = ConnectionPool.getInstance();
 		Connection c = null;
 		PreparedStatement ps = null;
@@ -70,15 +73,19 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 			c = cp.getConnection();
 			ps = c.prepareStatement(GET_ALL);
 			rs = ps.executeQuery();
-			List <CarBrand> carBrands = new ArrayList<CarBrand>();
+			List <Reservation> reservations = new ArrayList<Reservation>();
 			while (rs.next()) {
-				CarBrand carBrand = new CarBrand (
+				Reservation reservation = new Reservation (
 						rs.getLong("id"),
-						rs.getString("name")
+						rs.getTimestamp("pickup_date_time"),
+						rs.getTimestamp("return_date_time"),
+						rs.getDouble("cost"),
+						rs.getLong("confirmation_number"),
+						rs.getDate("creation_date")
 						);
-				carBrands.add(carBrand);
+				reservations.add(reservation);
 			}
-			return carBrands;
+			return reservations;
 		} catch (ClassNotFoundException e) {
 			LOGGER.error(e);
 		} catch (InterruptedException e) {
@@ -100,7 +107,7 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 	}
 	
 	@Override
-	public void updateEntity(CarBrand carBrand) {	
+	public void updateEntity(Reservation reservation) {	
 		ConnectionPool cp = ConnectionPool.getInstance();
 		Connection c = null;
 		PreparedStatement ps = null;
@@ -108,8 +115,11 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement(UPDATE);
-			ps.setString(1, carBrand.getName());
-			ps.setLong(2, carBrand.getId());
+			ps.setTimestamp(1, reservation.getPickupDateTime());
+			ps.setTimestamp(2, reservation.getReturnDateTime());
+			ps.setDouble(3, reservation.getCost());
+			ps.setLong (4, reservation.getConfirmationNumber());
+			ps.setLong(5, reservation.getId());
 			ps.executeUpdate();
 		} catch (ClassNotFoundException e) {
 			LOGGER.error(e);
@@ -130,20 +140,20 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 	}
 	
 	@Override
-	public void saveEntity(CarBrand carBrand) {
+	public void saveEntity(Reservation reservation) {
 		ConnectionPool cp = ConnectionPool.getInstance();
 		Connection c = null;
 		PreparedStatement ps = null;
-		ResultSet rs = null;
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
-			ps.setString(1, carBrand.getName());
+			ps = c.prepareStatement(INSERT);
+			ps.setLong(1, reservation.getId());
+			ps.setTimestamp(2, reservation.getPickupDateTime());
+			ps.setTimestamp(3, reservation.getReturnDateTime());
+			ps.setDouble(4, reservation.getCost());
+			ps.setLong (5, reservation.getConfirmationNumber());
 			ps.executeUpdate();
-			rs = ps.getGeneratedKeys();
-			rs.next();
-			carBrand.setId(rs.getLong(1));
 		} catch (ClassNotFoundException e) {
 			LOGGER.error(e);
 		} catch (InterruptedException e) {
@@ -153,7 +163,6 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 		} finally {
 			try {
 				ps.close();
-				rs.close();
 				cp.releaseConnection(c);
 			} catch (InterruptedException e) {
 				LOGGER.error(e);
@@ -191,5 +200,6 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 			}
 		}
 	}
+	
 
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Location {
+	private Long id;
 	private BusinessEntity be;
 	private String name;
 	private String hoursOfOperation;
@@ -11,6 +12,16 @@ public class Location {
 	private List<Employee> employees = new ArrayList<Employee>();
 	private List<Car> cars = new ArrayList<Car>();
 	
+	public Location () {}
+	
+	public Location(Long id, String name, String hoursOfOperation, String additionalInformation) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.hoursOfOperation = hoursOfOperation;
+		this.additionalInformation = additionalInformation;
+	}
+
 	public Location(BusinessEntity be, String name) {
 		this.be = be;
 		this.name = name;
@@ -28,6 +39,14 @@ public class Location {
 		this.name = name;
 		this.hoursOfOperation = hoursOfOperation;
 		this.additionalInformation = additionalInformation;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public BusinessEntity getBe() {

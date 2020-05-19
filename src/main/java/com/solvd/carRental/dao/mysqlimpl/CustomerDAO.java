@@ -9,11 +9,17 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.solvd.carRental.connectionpool.ConnectionPool;
-import com.solvd.carRental.dao.ICustomerDAO;
+import com.solvd.carRental.dao.IEntityDAO;
 import com.solvd.carRental.models.Customer;
 
-public class CustomerDAO implements ICustomerDAO{
-private final static Logger LOGGER = LogManager.getLogger(CustomerDAO.class);
+public class CustomerDAO implements IEntityDAO<Customer>{
+	private final static Logger LOGGER = LogManager.getLogger(CustomerDAO.class);
+	private final static String GET_BY_ID = "select * from Customers where id = ?";
+	private final static String GET_ALL = "select * from Customers";
+	private final static String INSERT = "insert into Customers (id, email_address) values(?, ?)";
+	private final static String UPDATE = "update Customers set email_address = ? where id = ?";
+	private final static String DELETE = "delete from Customers where id = ?"; 
+	
 	
 	@Override
 	public Customer getEntityById(Long id) {	
@@ -22,13 +28,14 @@ private final static Logger LOGGER = LogManager.getLogger(CustomerDAO.class);
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement("select * from Customers where id = ?");
+			ps = c.prepareStatement(GET_BY_ID);
 			ps.setLong(1, id);
 			rs = ps.executeQuery();
 			rs.next();
 			Customer customer = new Customer (
+					rs.getLong("id"),
 					rs.getString("email_address")
 					);
 			return customer;
@@ -59,13 +66,14 @@ private final static Logger LOGGER = LogManager.getLogger(CustomerDAO.class);
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement("select * from Customers where id = ?");
+			ps = c.prepareStatement(GET_ALL);
 			rs = ps.executeQuery();
 			List <Customer> customers = new ArrayList<Customer>();
 			while (rs.next()) {
 				Customer customer = new Customer (
+						rs.getLong("id"),
 						rs.getString("email_address")
 						);
 				customers.add(customer);
@@ -92,16 +100,16 @@ private final static Logger LOGGER = LogManager.getLogger(CustomerDAO.class);
 	}
 	
 	@Override
-	public void updateEntityById(Customer customer) {	
+	public void updateEntity(Customer customer) {	
 		ConnectionPool cp = ConnectionPool.getInstance();
 		Connection c = null;
 		PreparedStatement ps = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement("update Customers set email_address = ? where id = ?");
+			ps = c.prepareStatement(UPDATE);
 			ps.setString(1, customer.getEmailAddress());
-			ps.setLong(2, customer.getPerson().getBe().getId()); //not sure if this is right
+			ps.setLong(2, customer.getId());
 			ps.executeUpdate();
 		} catch (ClassNotFoundException e) {
 			LOGGER.error(e);
@@ -127,10 +135,10 @@ private final static Logger LOGGER = LogManager.getLogger(CustomerDAO.class);
 		Connection c = null;
 		PreparedStatement ps = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement("insert into Customers (id, email_address) values(?, ?)");
-			ps.setLong(1, customer.getPerson().getBe().getId());
+			ps = c.prepareStatement(INSERT);
+			ps.setLong(1, customer.getId());
 			ps.setString(2, customer.getEmailAddress());
 			ps.executeUpdate();
 		} catch (ClassNotFoundException e) {
@@ -157,9 +165,10 @@ private final static Logger LOGGER = LogManager.getLogger(CustomerDAO.class);
 		Connection c = null;
 		PreparedStatement ps = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement("delete from Customers where id = ?");
+			ps = c.prepareStatement(DELETE);
+			ps.setLong(1, id);
 			ps.executeUpdate();
 		} catch (ClassNotFoundException e) {
 			LOGGER.error(e);

@@ -4,6 +4,8 @@ public class PaymentType {
 	private Long id;
 	private String name;
 	
+	public PaymentType() {}
+	
 	public PaymentType(Long id, String name) {
 		this.id = id;
 		this.name = name;

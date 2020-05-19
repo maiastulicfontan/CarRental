@@ -8,6 +8,8 @@ public class Address {
 	private String zipCode;
 	private Region region;
 	
+	public Address () {}
+	
 	public Address(Long id, String addressFirstLine, String city, String zipCode, Region region) {
 		this.id = id;
 		this.addressFirstLine = addressFirstLine;

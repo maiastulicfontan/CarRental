@@ -1,30 +1,31 @@
 package com.solvd.carRental.models;
 
 public class SpecialServiceType {
-	private long id;
+	private Long id;
 	private String name;
 	private String description;
-	private double cost;
+	private Double cost;
 	
-	public SpecialServiceType(long id, String name, double cost) {
+	public SpecialServiceType () {}
+	
+	public SpecialServiceType(Long id, String name, Double cost) {
 		this.id = id;
 		this.name = name;
 		this.cost = cost;
 	}
 
-	public SpecialServiceType(long id, String name, String description, double cost) {
-		super();
+	public SpecialServiceType(Long id, String name, String description, Double cost) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.cost = cost;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -44,11 +45,11 @@ public class SpecialServiceType {
 		this.description = description;
 	}
 
-	public double getCost() {
+	public Double getCost() {
 		return cost;
 	}
 
-	public void setCost(double cost) {
+	public void setCost(Double cost) {
 		this.cost = cost;
 	}
 }

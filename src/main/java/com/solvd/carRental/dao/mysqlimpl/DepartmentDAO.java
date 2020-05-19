@@ -9,11 +9,16 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.solvd.carRental.connectionpool.ConnectionPool;
-import com.solvd.carRental.dao.IDepartmentDAO;
+import com.solvd.carRental.dao.IEntityDAO;
 import com.solvd.carRental.models.Department;
 
-public class DepartmentDAO implements IDepartmentDAO {
+public class DepartmentDAO implements IEntityDAO<Department> {
 	private final static Logger LOGGER = LogManager.getLogger(DepartmentDAO.class);
+	private final static String GET_BY_ID = "select * from Departments where id = ?";
+	private final static String GET_ALL = "select * from Departments";
+	private final static String INSERT = "insert into Departments (id, name, description) values(?, ?, ?)";
+	private final static String UPDATE = "update Departments set name = ?, description = ?  where id = ?";
+	private final static String DELETE = "delete from Departments where id = ?";
 	
 	@Override
 	public Department getEntityById(Long id) {	
@@ -22,9 +27,9 @@ public class DepartmentDAO implements IDepartmentDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement("select * from Departments where id = ?");
+			ps = c.prepareStatement(GET_BY_ID);
 			ps.setLong(1, id);
 			rs = ps.executeQuery();
 			rs.next();
@@ -61,9 +66,9 @@ public class DepartmentDAO implements IDepartmentDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement("select * from Departments where id = ?");
+			ps = c.prepareStatement(GET_ALL);
 			rs = ps.executeQuery();
 			List <Department> departments = new ArrayList<Department>();
 			while (rs.next()) {
@@ -96,14 +101,14 @@ public class DepartmentDAO implements IDepartmentDAO {
 	}
 	
 	@Override
-	public void updateEntityById(Department department) {	
+	public void updateEntity(Department department) {	
 		ConnectionPool cp = ConnectionPool.getInstance();
 		Connection c = null;
 		PreparedStatement ps = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement("update Departments set name = ?, description = ?  where id = ?");
+			ps = c.prepareStatement(UPDATE);
 			ps.setString(1, department.getName());
 			ps.setString(2, department.getDescription());
 			ps.setLong(3, department.getId());
@@ -132,9 +137,9 @@ public class DepartmentDAO implements IDepartmentDAO {
 		Connection c = null;
 		PreparedStatement ps = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement("insert into Departments (id, name, description) values(?, ?, ?)");
+			ps = c.prepareStatement(INSERT);
 			ps.setLong(1, department.getId());
 			ps.setString(2, department.getName());
 			ps.setString(3, department.getDescription());
@@ -163,9 +168,10 @@ public class DepartmentDAO implements IDepartmentDAO {
 		Connection c = null;
 		PreparedStatement ps = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement("delete from Departments where id = ?");
+			ps = c.prepareStatement(DELETE);
+			ps.setLong(1, id);
 			ps.executeUpdate();
 		} catch (ClassNotFoundException e) {
 			LOGGER.error(e);

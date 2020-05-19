@@ -4,13 +4,24 @@ import java.sql.Date;
 
 
 public class Person {
+	private Long id;
 	private BusinessEntity be;
 	private String firstName;
 	private String lastName;
 	private Date birthDate;
 	private String nationalGovernmentId;
 	
+	public Person () {}
 	
+	public Person(Long id, String firstName, String lastName, Date birthDate, String nationalGovernmentId) {
+		super();
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.birthDate = birthDate;
+		this.nationalGovernmentId = nationalGovernmentId;
+	}
+
 	public Person(BusinessEntity be, String firstName, String lastName, Date birthDate,String nationalGovernmentId) {
 		this.be = be;
 		this.firstName = firstName;
@@ -19,6 +30,14 @@ public class Person {
 		this.nationalGovernmentId = nationalGovernmentId;
 	}
 
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public BusinessEntity getBe() {
 		return be;

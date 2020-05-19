@@ -9,11 +9,16 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.solvd.carRental.connectionpool.ConnectionPool;
-import com.solvd.carRental.dao.ICreditCardTypeDAO;
+import com.solvd.carRental.dao.IEntityDAO;
 import com.solvd.carRental.models.CreditCardType;
 
-public class CreditCardTypeDAO implements ICreditCardTypeDAO {
-private final static Logger LOGGER = LogManager.getLogger(CreditCardTypeDAO.class);
+public class CreditCardTypeDAO implements IEntityDAO<CreditCardType> {
+	private final static Logger LOGGER = LogManager.getLogger(CreditCardTypeDAO.class);
+	private final static String GET_BY_ID = "select * from Credit_Card_Types where id = ?";
+	private final static String GET_ALL = "select * from Credit_Card_Types";
+	private final static String INSERT = "insert into Credit_Card_Types (id, name) values(?, ?)";
+	private final static String UPDATE = "update Credit_Car_Types set name = ? where id = ?";
+	private final static String DELETE = "delete from Credit_Card_Types where id = ?";
 	
 	@Override
 	public CreditCardType getEntityById(Long id) {	
@@ -22,9 +27,9 @@ private final static Logger LOGGER = LogManager.getLogger(CreditCardTypeDAO.clas
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement("select * from Credit_Card_Types where id = ?");
+			ps = c.prepareStatement(GET_BY_ID);
 			ps.setLong(1, id);
 			rs = ps.executeQuery();
 			rs.next();
@@ -60,9 +65,9 @@ private final static Logger LOGGER = LogManager.getLogger(CreditCardTypeDAO.clas
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement("select * from Credit_Card_Types");
+			ps = c.prepareStatement(GET_ALL);
 			rs = ps.executeQuery();
 			List <CreditCardType> creditCardTypes = new ArrayList<CreditCardType>();
 			while (rs.next()) {
@@ -94,14 +99,14 @@ private final static Logger LOGGER = LogManager.getLogger(CreditCardTypeDAO.clas
 	}
 	
 	@Override
-	public void updateEntityById(CreditCardType creditCardType) {	
+	public void updateEntity(CreditCardType creditCardType) {	
 		ConnectionPool cp = ConnectionPool.getInstance();
 		Connection c = null;
 		PreparedStatement ps = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement("update Credit_Car_Types set name = ? where id = ?");
+			ps = c.prepareStatement(UPDATE);
 			ps.setString(1, creditCardType.getName());
 			ps.setLong(2, creditCardType.getId());
 			ps.executeUpdate();
@@ -129,9 +134,9 @@ private final static Logger LOGGER = LogManager.getLogger(CreditCardTypeDAO.clas
 		Connection c = null;
 		PreparedStatement ps = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement("insert into Credit_Card_Types (id, name) values(?, ?)");
+			ps = c.prepareStatement(INSERT);
 			ps.setLong(1, creditCardType.getId());
 			ps.setString(2, creditCardType.getName());
 			ps.executeUpdate();
@@ -159,9 +164,10 @@ private final static Logger LOGGER = LogManager.getLogger(CreditCardTypeDAO.clas
 		Connection c = null;
 		PreparedStatement ps = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement("delete from Credit_Card_Types where id = ?");
+			ps = c.prepareStatement(DELETE);
+			ps.setLong(1, id);
 			ps.executeUpdate();
 		} catch (ClassNotFoundException e) {
 			LOGGER.error(e);

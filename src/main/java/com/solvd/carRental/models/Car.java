@@ -7,6 +7,7 @@ public class Car {
 	private String color;
 	private CarModel model;
 	
+	public Car() {}
 	
 	public Car(Long id, String licensePlate, CarModel model) {
 		this.id = id;

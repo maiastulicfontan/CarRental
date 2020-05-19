@@ -9,11 +9,16 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.solvd.carRental.connectionpool.ConnectionPool;
-import com.solvd.carRental.dao.IBusinessEntityDAO;
+import com.solvd.carRental.dao.IEntityDAO;
 import com.solvd.carRental.models.BusinessEntity;
 
-public class BusinessEntityDAO implements IBusinessEntityDAO {
+public class BusinessEntityDAO implements IEntityDAO<BusinessEntity> {
 		private final static Logger LOGGER = LogManager.getLogger(BusinessEntityDAO.class);
+		private final static String GET_BY_ID = "select * from Business_Entities where id = ?";
+		private final static String GET_ALL = "select * from Business_Entities";
+		private final static String INSERT = "insert into Business_Entities (id) values(?)" ;
+		private final static String UPDATE = "update Business_Entity set id = ?  where id = ?";
+		private final static String DELETE = "delete from Business_Entities where id = ?";
 
 		@Override
 		public BusinessEntity getEntityById(Long id) {	
@@ -22,9 +27,9 @@ public class BusinessEntityDAO implements IBusinessEntityDAO {
 			PreparedStatement ps = null;
 			ResultSet rs = null;
 			try {
-				Class.forName("com.mysql.jdbc.Driver");
+				Class.forName("com.mysql.cj.jdbc.Driver");
 				c = cp.getConnection();
-				ps = c.prepareStatement("select * from Business_Entities where id = ?");
+				ps = c.prepareStatement(GET_BY_ID);
 				ps.setLong(1, id);
 				rs = ps.executeQuery();
 				rs.next();
@@ -59,9 +64,9 @@ public class BusinessEntityDAO implements IBusinessEntityDAO {
 			PreparedStatement ps = null;
 			ResultSet rs = null;
 			try {
-				Class.forName("com.mysql.jdbc.Driver");
+				Class.forName("com.mysql.cj.jdbc.Driver");
 				c = cp.getConnection();
-				ps = c.prepareStatement("select * from Business_Entities where id = ?");
+				ps = c.prepareStatement(GET_ALL);
 				rs = ps.executeQuery();
 				List <BusinessEntity> businessEntities = new ArrayList<BusinessEntity>();
 				while (rs.next()) {
@@ -92,14 +97,14 @@ public class BusinessEntityDAO implements IBusinessEntityDAO {
 		}
 		
 		@Override
-		public void updateEntityById(BusinessEntity be) {	
+		public void updateEntity(BusinessEntity be) {	
 			ConnectionPool cp = ConnectionPool.getInstance();
 			Connection c = null;
 			PreparedStatement ps = null;
 			try {
-				Class.forName("com.mysql.jdbc.Driver");
+				Class.forName("com.mysql.cj.jdbc.Driver");
 				c = cp.getConnection();
-				ps = c.prepareStatement("update Business_Entity set id = ?  where id = ?");
+				ps = c.prepareStatement(UPDATE);
 				ps.setLong(1, be.getId());
 				ps.executeUpdate();
 			} catch (ClassNotFoundException e) {
@@ -126,9 +131,9 @@ public class BusinessEntityDAO implements IBusinessEntityDAO {
 			Connection c = null;
 			PreparedStatement ps = null;
 			try {
-				Class.forName("com.mysql.jdbc.Driver");
+				Class.forName("com.mysql.cj.jdbc.Driver");
 				c = cp.getConnection();
-				ps = c.prepareStatement("insert into Business_Entities (id) values(?)");
+				ps = c.prepareStatement(INSERT);
 				ps.setLong(1, be.getId());
 				ps.executeUpdate();
 			} catch (ClassNotFoundException e) {
@@ -155,9 +160,10 @@ public class BusinessEntityDAO implements IBusinessEntityDAO {
 			Connection c = null;
 			PreparedStatement ps = null;
 			try {
-				Class.forName("com.mysql.jdbc.Driver");
+				Class.forName("com.mysql.cj.jdbc.Driver");
 				c = cp.getConnection();
-				ps = c.prepareStatement("delete from Business_Entities where id = ?");
+				ps = c.prepareStatement(DELETE);
+				ps.setLong(1, id);
 				ps.executeUpdate();
 			} catch (ClassNotFoundException e) {
 				LOGGER.error(e);

@@ -13,6 +13,7 @@ public class CarModel {
 	private CarType type;
 	private Double costPerDay;
 	
+	public CarModel() {}
 	
 	public CarModel(Long id, String name, String transmission, Integer numberOfSeats, String airbagInfo,
 			String luggageSpace, String fuelConsumption, CarBrand brand, CarType type, Double costPerDay) {

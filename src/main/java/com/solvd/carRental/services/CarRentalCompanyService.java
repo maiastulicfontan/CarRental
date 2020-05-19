@@ -15,7 +15,11 @@ public class CarRentalCompanyService {
 	
 	public CarRentalCompany getCarRentalCompanyById (Long id) {
 		CarRentalCompany carRentalCompany = carRentalCompanyDao.getEntityById (id);
-		carRentalCompany.setLocations(locationDao.getAllByCarRentalCompanyId(id));
+		this.update(carRentalCompany);
 		return carRentalCompany;
+	}
+	
+	public void update (CarRentalCompany carRentalCompany) {
+		carRentalCompany.setLocations(locationDao.getAllByCarRentalCompanyId(carRentalCompany.getId()));
 	}
 }

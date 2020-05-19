@@ -1,24 +1,41 @@
 package com.solvd.carRental.models;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.sql.Date;
+import java.sql.Timestamp;
 
 public class Reservation {
-	private long id;
-	private LocalDateTime pickupDateTime;
-	private LocalDateTime returnDateTime;
-	private double cost;
-	private long confirmationNumber;
-	private LocalDate creationDate;
+	private Long id;
+	private Timestamp pickupDateTime;
+	private Timestamp returnDateTime;
+	private Double cost;
+	private Long confirmationNumber;
+	private Date creationDate;
 	private Location pickupLocation;
 	private Location returnLocation;
 	private Customer customer;
 	private Car car;
 	private ReservationStatus status;
+	private List<SpecialService> specialServices = new ArrayList<SpecialService>();
+	
+	public Reservation () {}
 	
 	
-	public Reservation(long id, LocalDateTime pickupDateTime, LocalDateTime returnDateTime, double cost,
-			long confirmationNumber, LocalDate creationDate, Location pickupLocation, Customer customer, Car car,
+	public Reservation(Long id, Timestamp pickupDateTime, Timestamp returnDateTime, Double cost,
+			Long confirmationNumber, Date creationDate) {
+		this.id = id;
+		this.pickupDateTime = pickupDateTime;
+		this.returnDateTime = returnDateTime;
+		this.cost = cost;
+		this.confirmationNumber = confirmationNumber;
+		this.creationDate = creationDate;
+	}
+
+
+	public Reservation(Long id, Timestamp pickupDateTime, Timestamp returnDateTime, Double cost,
+			Long confirmationNumber, Date creationDate, Location pickupLocation, Customer customer, Car car,
 			ReservationStatus status) {
 		this.id = id;
 		this.pickupDateTime = pickupDateTime;
@@ -33,8 +50,8 @@ public class Reservation {
 	}
 
 
-	public Reservation(long id, LocalDateTime pickupDateTime, LocalDateTime returnDateTime, double cost,
-			long confirmationNumber, LocalDate creationDate, Location pickupLocation, Location returnLocation,
+	public Reservation(Long id, Timestamp pickupDateTime, Timestamp returnDateTime, Double cost,
+			Long confirmationNumber, Date creationDate, Location pickupLocation, Location returnLocation,
 			Customer customer, Car car, ReservationStatus status) {
 		super();
 		this.id = id;
@@ -56,57 +73,57 @@ public class Reservation {
 	}
 
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
 
-	public LocalDateTime getPickupDateTime() {
+	public Timestamp getPickupDateTime() {
 		return pickupDateTime;
 	}
 
 
-	public void setPickupDateTime(LocalDateTime pickupDateTime) {
+	public void setPickupDateTime(Timestamp pickupDateTime) {
 		this.pickupDateTime = pickupDateTime;
 	}
 
 
-	public LocalDateTime getReturnDateTime() {
+	public Timestamp getReturnDateTime() {
 		return returnDateTime;
 	}
 
 
-	public void setReturnDateTime(LocalDateTime returnDateTime) {
+	public void setReturnDateTime(Timestamp returnDateTime) {
 		this.returnDateTime = returnDateTime;
 	}
 
 
-	public double getCost() {
+	public Double getCost() {
 		return cost;
 	}
 
 
-	public void setCost(double cost) {
+	public void setCost(Double cost) {
 		this.cost = cost;
 	}
 
 
-	public long getConfirmationNumber() {
+	public Long getConfirmationNumber() {
 		return confirmationNumber;
 	}
 
 
-	public void setConfirmationNumber(long confirmationNumber) {
+	public void setConfirmationNumber(Long confirmationNumber) {
 		this.confirmationNumber = confirmationNumber;
 	}
 
 
-	public LocalDate getCreationDate() {
+	public Date getCreationDate() {
 		return creationDate;
 	}
 
 
-	public void setCreationDate(LocalDate creationDate) {
+	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
 	}
 
@@ -158,6 +175,16 @@ public class Reservation {
 
 	public void setStatus(ReservationStatus status) {
 		this.status = status;
+	}
+
+
+	public List<SpecialService> getSpecialServices() {
+		return specialServices;
+	}
+
+
+	public void setSpecialServices(List<SpecialService> specialServices) {
+		this.specialServices = specialServices;
 	}
 	
 }

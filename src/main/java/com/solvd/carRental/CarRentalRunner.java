@@ -4,33 +4,44 @@ package com.solvd.carRental;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.solvd.carRental.dao.mysqlimpl.CarDAO;
-import com.solvd.carRental.models.Car;
+import com.solvd.carRental.dao.mysqlimpl.CarBrandDAO;
+import com.solvd.carRental.dao.mysqlimpl.CreditCardDAO;
+import com.solvd.carRental.dao.mysqlimpl.CustomerDAO;
+import com.solvd.carRental.models.CarBrand;
+import com.solvd.carRental.models.Customer;
 import com.solvd.carRental.services.CustomerService;
 
 public class CarRentalRunner {
 	private static Logger LOGGER = LogManager.getLogger(CarRentalRunner.class);
 	
 	public static void main(String[] args) {
-		CarDAO carDao = new CarDAO();
+		CustomerDAO custDao = new CustomerDAO();
 		CustomerService custService = new CustomerService();
+		CreditCardDAO cardDao = new CreditCardDAO();
+		CarBrandDAO carBrandDao = new CarBrandDAO();
+		Customer cust = (custService.getCustomerById(2L));
 		
-		LOGGER.info(custService.getCustomerById(new Long(1)));
+		LOGGER.info(custService.getAllCustomers());
 		
-		Car car = new Car (new Long(5), "ABC1234", 2017, "Electric blue");
-		carDao.saveEntity(car);
+		cust.setEmailAddress("johndoe@mail.com");
 		
-		carDao.getAll().forEach(carTmp -> LOGGER.info(carTmp));
+		custDao.updateEntity(cust);
 		
-		car.setColor("Dark blue");
+		LOGGER.info(custService.getCustomerById(cust.getId()));
 		
-		carDao.updateEntityById(car);
+		LOGGER.info(cardDao.getAllByCustomerId(2L));
 		
-		carDao.getAll().forEach(carTmp -> LOGGER.info(carTmp));
+		CarBrand bmw = new CarBrand ("Toyota");
 		
-		carDao.deleteEntityById(car.getId());
+		carBrandDao.saveEntity(bmw);
 		
-		carDao.getAll().forEach(carTmp -> LOGGER.info(carTmp));
+		LOGGER.info(carBrandDao.getAll());
+		
+		carBrandDao.deleteEntityById(3L);
+		
+		LOGGER.info(carBrandDao.getAll());
+		
+		
 	}
 
 }

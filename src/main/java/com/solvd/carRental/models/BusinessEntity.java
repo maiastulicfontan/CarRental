@@ -8,6 +8,8 @@ public class BusinessEntity {
 	private List <Address> addresses = new ArrayList<Address>();
 	private List <PhoneNumber> phoneNumbers = new ArrayList<PhoneNumber>();
 	
+	public BusinessEntity () {}
+	
 	public BusinessEntity(long id) {
 		this.id = id;
 	}

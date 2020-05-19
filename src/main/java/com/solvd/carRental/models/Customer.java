@@ -4,18 +4,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Customer {
+	private Long id;
 	private Person person;
 	private String emailAddress;
 	private List <CreditCard> creditCards = new ArrayList<CreditCard>();
+	
+	public Customer () {}
 	
 	public Customer(Person person, String emailAddress) {
 		this.person = person;
 		this.emailAddress = emailAddress;
 	}
 
-	public Customer(String emailAddress) {
-		super();
+	public Customer(Long id, String emailAddress) {
+		this.id = id;
 		this.emailAddress = emailAddress;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Person getPerson() {
@@ -41,6 +52,11 @@ public class Customer {
 	public void setCreditCards(List<CreditCard> creditCards) {
 		this.creditCards = creditCards;
 	}
+
+	@Override
+	public String toString() {
+		return "Customer [id=" + id + ", emailAddress=" + emailAddress + ", creditCards=" + creditCards + "]";
+	}
 	
-	
+
 }

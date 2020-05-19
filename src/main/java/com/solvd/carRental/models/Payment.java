@@ -1,14 +1,24 @@
 package com.solvd.carRental.models;
 
-import java.time.LocalDate;
+import java.sql.Date;
+
+//import java.time.LocalDate;
 
 public class Payment {
 	private Long id;
 	private PaymentType type;
-	private LocalDate date;
+	private Date date;
 	private Rental rental;
 	
-	public Payment(Long id, PaymentType type, LocalDate date, Rental rental) {
+	public Payment () {}
+	
+	public Payment(Long id,Date date) {
+		super();
+		this.id = id;
+		this.date = date;
+	}
+
+	public Payment(Long id, PaymentType type,Date date, Rental rental) {
 		this.id = id;
 		this.type = type;
 		this.date = date;
@@ -31,11 +41,11 @@ public class Payment {
 		this.type = type;
 	}
 
-	public LocalDate getDate() {
+	public Date getDate() {
 		return date;
 	}
 
-	public void setDate(LocalDate date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 

@@ -1,28 +1,28 @@
+
 package com.solvd.carRental.dao.mysqlimpl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.solvd.carRental.connectionpool.ConnectionPool;
 import com.solvd.carRental.dao.IEntityDAO;
-import com.solvd.carRental.models.CarBrand;
+import com.solvd.carRental.models.SpecialServiceType;
 
-public class CarBrandDAO implements IEntityDAO<CarBrand>{
-	private final static Logger LOGGER = LogManager.getLogger(CarBrandDAO.class);
-	private final static String GET_BY_ID = "select * from Car_Brands where id = ?";
-	private final static String GET_ALL = "select * from Car_Brands";
-	private final static String INSERT = "insert into Car_Brands (name) values(?)";
-	private final static String UPDATE = "update Car_Brands set name = ?  where id = ?";
-	private final static String DELETE = "delete from Car_Brands where id = ?";
+public class SpecialServiceTypeDAO implements IEntityDAO<SpecialServiceType> {
+	private final static Logger LOGGER = LogManager.getLogger(SpecialServiceTypeDAO.class);
+	private final static String GET_BY_ID = "select * from Special_Service_Types where id = ?";
+	private final static String GET_ALL = "select * from Special_Service_Types";
+	private final static String INSERT = "insert into Special_Service_Types (id, name, description, cost) values (?,?,?,?) ";
+	private final static String UPDATE = "update Special_Service_Types set name = ?, description = ?, cost = ? where id = ?";
+	private final static String DELETE = "delete from Special_Service_Types where id = ?";
 	
 	@Override
-	public CarBrand getEntityById(Long id) {	
+	public SpecialServiceType getEntityById(Long id) {	
 		ConnectionPool cp = ConnectionPool.getInstance();
 		Connection c = null;
 		PreparedStatement ps = null;
@@ -34,11 +34,13 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 			ps.setLong(1, id);
 			rs = ps.executeQuery();
 			rs.next();
-			CarBrand carBrand = new CarBrand (
+			SpecialServiceType specialServiceType = new SpecialServiceType (
 					rs.getLong("id"),
-					rs.getString("name")
+					rs.getString("name"),
+					rs.getString("description"),
+					rs.getDouble("cost")
 					);
-			return carBrand;
+			return specialServiceType;
 		} catch (ClassNotFoundException e) {
 			LOGGER.error(e);
 		} catch (InterruptedException e) {
@@ -60,7 +62,7 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 	}
 	
 	@Override
-	public List<CarBrand> getAll() {
+	public List<SpecialServiceType> getAll() {
 		ConnectionPool cp = ConnectionPool.getInstance();
 		Connection c = null;
 		PreparedStatement ps = null;
@@ -70,15 +72,17 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 			c = cp.getConnection();
 			ps = c.prepareStatement(GET_ALL);
 			rs = ps.executeQuery();
-			List <CarBrand> carBrands = new ArrayList<CarBrand>();
+			List <SpecialServiceType> specialServiceTypes = new ArrayList<SpecialServiceType>();
 			while (rs.next()) {
-				CarBrand carBrand = new CarBrand (
-						rs.getLong("id"),
-						rs.getString("name")
-						);
-				carBrands.add(carBrand);
+				SpecialServiceType specialServiceType = new SpecialServiceType (
+					rs.getLong("id"),
+					rs.getString("name"),
+					rs.getString("description"),
+					rs.getDouble("cost")
+				);
+				specialServiceTypes.add(specialServiceType);
 			}
-			return carBrands;
+			return specialServiceTypes;
 		} catch (ClassNotFoundException e) {
 			LOGGER.error(e);
 		} catch (InterruptedException e) {
@@ -100,7 +104,7 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 	}
 	
 	@Override
-	public void updateEntity(CarBrand carBrand) {	
+	public void updateEntity(SpecialServiceType specialServiceType) {	
 		ConnectionPool cp = ConnectionPool.getInstance();
 		Connection c = null;
 		PreparedStatement ps = null;
@@ -108,8 +112,10 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement(UPDATE);
-			ps.setString(1, carBrand.getName());
-			ps.setLong(2, carBrand.getId());
+			ps.setString(1, specialServiceType.getName());
+			ps.setString(2, specialServiceType.getDescription());
+			ps.setDouble(3, specialServiceType.getCost());
+			ps.setLong(4, specialServiceType.getId()); 
 			ps.executeUpdate();
 		} catch (ClassNotFoundException e) {
 			LOGGER.error(e);
@@ -130,20 +136,19 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 	}
 	
 	@Override
-	public void saveEntity(CarBrand carBrand) {
+	public void saveEntity(SpecialServiceType specialServiceType) {
 		ConnectionPool cp = ConnectionPool.getInstance();
 		Connection c = null;
 		PreparedStatement ps = null;
-		ResultSet rs = null;
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
-			ps.setString(1, carBrand.getName());
+			ps = c.prepareStatement(INSERT);
+			ps.setLong(1, specialServiceType.getId());
+			ps.setString(2, specialServiceType.getName());
+			ps.setString(3, specialServiceType.getDescription());
+			ps.setDouble(4, specialServiceType.getCost());
 			ps.executeUpdate();
-			rs = ps.getGeneratedKeys();
-			rs.next();
-			carBrand.setId(rs.getLong(1));
 		} catch (ClassNotFoundException e) {
 			LOGGER.error(e);
 		} catch (InterruptedException e) {
@@ -153,7 +158,6 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 		} finally {
 			try {
 				ps.close();
-				rs.close();
 				cp.releaseConnection(c);
 			} catch (InterruptedException e) {
 				LOGGER.error(e);
@@ -164,7 +168,7 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 	}
 
 	@Override
-	public void deleteEntityById(Long id) {
+	public void deleteEntityById(Long id) { 
 		ConnectionPool cp = ConnectionPool.getInstance();
 		Connection c = null;
 		PreparedStatement ps = null;
@@ -191,5 +195,6 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 			}
 		}
 	}
+
 
 }

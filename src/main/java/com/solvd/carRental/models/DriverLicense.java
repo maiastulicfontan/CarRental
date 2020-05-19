@@ -9,6 +9,8 @@ public class DriverLicense {
 	private Date validFrom;
 	private Date expiration;
 	
+	public DriverLicense () {}
+	
 	public DriverLicense(Long id, Customer customer, Long number, Date validFrom, Date expirationDate) {
 		this.id = id;
 		this.customer = customer;

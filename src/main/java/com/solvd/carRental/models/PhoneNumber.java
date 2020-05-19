@@ -4,6 +4,8 @@ public class PhoneNumber {
 	private Long id;
 	private String number;
 	
+	public PhoneNumber() {}
+	
 	public PhoneNumber(Long id, String number) {
 		this.id = id;
 		this.number = number;

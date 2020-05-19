@@ -14,6 +14,11 @@ import com.solvd.carRental.models.Employee;
 
 public class EmployeeDAO implements IEmployeeDAO{
 	private final static Logger LOGGER = LogManager.getLogger(EmployeeDAO.class);
+	private final static String GET_BY_ID = "select * from Employees where id = ?";
+	private final static String GET_ALL = "select * from Employees";
+	private final static String INSERT = "insert into Employees (id, hire_date) values(?, ?)";
+	private final static String UPDATE = "update Employees set hire_date = ?  where id = ?";
+	private final static String DELETE = "delete from Employees where id = ?";
 
 	@Override
 	public Employee getEntityById(Long id) {	
@@ -22,13 +27,14 @@ public class EmployeeDAO implements IEmployeeDAO{
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement("select * from Employees where id = ?");
+			ps = c.prepareStatement(GET_BY_ID);
 			ps.setLong(1, id);
 			rs = ps.executeQuery();
 			rs.next();
 			Employee employee = new Employee (
+					rs.getLong("id"),
 					rs.getDate("hire_date")
 					);
 			return employee;
@@ -59,13 +65,14 @@ public class EmployeeDAO implements IEmployeeDAO{
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement("select * from Employees");
+			ps = c.prepareStatement(GET_ALL);
 			rs = ps.executeQuery();
 			List <Employee> employees = new ArrayList<Employee>();
 			while (rs.next()) {
 				Employee employee = new Employee (
+						rs.getLong("id"),
 						rs.getDate("hire_date")
 						);
 				employees.add(employee);
@@ -92,14 +99,14 @@ public class EmployeeDAO implements IEmployeeDAO{
 	}
 	
 	@Override
-	public void updateEntityById(Employee employee) {	
+	public void updateEntity(Employee employee) {	
 		ConnectionPool cp = ConnectionPool.getInstance();
 		Connection c = null;
 		PreparedStatement ps = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement("update Employees set hire_date = ?  where id = ?");
+			ps = c.prepareStatement(UPDATE);
 			ps.setDate(1, employee.getHireDate());
 			ps.setLong(2, employee.getPerson().getBe().getId());
 			ps.executeUpdate();
@@ -127,9 +134,9 @@ public class EmployeeDAO implements IEmployeeDAO{
 		Connection c = null;
 		PreparedStatement ps = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement("insert into Cars (id, hire_date) values(?, ?)");
+			ps = c.prepareStatement(INSERT);
 			ps.setLong(1, employee.getPerson().getBe().getId());
 			ps.setDate(2, employee.getHireDate());
 			ps.executeUpdate();
@@ -157,9 +164,10 @@ public class EmployeeDAO implements IEmployeeDAO{
 		Connection c = null;
 		PreparedStatement ps = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement("delete from Employees where id = ?");
+			ps = c.prepareStatement(DELETE);
+			ps.setLong(1, id);
 			ps.executeUpdate();
 		} catch (ClassNotFoundException e) {
 			LOGGER.error(e);
@@ -185,7 +193,7 @@ public class EmployeeDAO implements IEmployeeDAO{
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement("select * from Employees where location_id = ?");
 			ps.setLong(1, locationId);
@@ -193,6 +201,7 @@ public class EmployeeDAO implements IEmployeeDAO{
 			List <Employee> employees = new ArrayList<Employee>();
 			while (rs.next()) {
 				Employee employee = new Employee (
+						rs.getLong("id"),
 						rs.getDate("hire_date")
 						);
 				employees.add(employee);

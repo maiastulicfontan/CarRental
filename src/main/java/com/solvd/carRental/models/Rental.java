@@ -5,6 +5,13 @@ public class Rental {
 	private Reservation reservation;
 	private Employee employee;
 	
+	public Rental () {}
+	
+	public Rental(Long id) {
+		super();
+		this.id = id;
+	}
+
 	public Rental(Long id, Reservation reservation, Employee employee) {
 		this.id = id;
 		this.reservation = reservation;

@@ -7,6 +7,8 @@ public class CreditCard {
 	private String expiration;
 	private CreditCardType type;
 	
+	public CreditCard () {}
+	
 	public CreditCard(Long id, Integer number, String validFrom, String expiration, CreditCardType type) {
 		this.id = id;
 		this.number = number;
@@ -61,6 +63,12 @@ public class CreditCard {
 
 	public void setType(CreditCardType type) {
 		this.type = type;
+	}
+	
+	@Override
+	public String toString() {
+		return "CreditCard [id=" + id + ", number=" + number + ", validFrom=" + validFrom + ", expiration=" + expiration
+				+ "]";
 	}
 }
 	

@@ -1,27 +1,29 @@
 package com.solvd.carRental.models;
 
 public class ReservationStatus {
-	private long id;
+	private Long id;
 	private String name;
 	private String description;
 	
-	public ReservationStatus(long id, String name) {
+	public ReservationStatus() {}
+	
+	public ReservationStatus(Long id, String name) {
 		this.id = id;
 		this.name = name;
 	}
 
-	public ReservationStatus(long id, String name, String description) {
+	public ReservationStatus(Long id, String name, String description) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.description = description;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

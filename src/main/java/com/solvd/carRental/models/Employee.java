@@ -4,9 +4,12 @@ import java.sql.Date;
 
 
 public class Employee {
+	private Long id;
 	private Person person;
 	private Date hireDate;
 	private EmployeePosition position;
+	
+	public Employee () {}
 	
 	public Employee(EmployeePosition position) {
 		this.position = position;
@@ -25,9 +28,17 @@ public class Employee {
 		this.position = position;
 	}
 
-	public Employee(Date hireDate) {
-		super();
+	public Employee(Long id, Date hireDate) {
+		this.id = id;
 		this.hireDate = hireDate;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Date getHireDate() {

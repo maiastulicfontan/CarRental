@@ -4,6 +4,8 @@ public class Country {
 	private Long id;
 	private String name;
 	
+	public Country () {}
+	
 	public Country(Long id, String name) {
 		this.id = id;
 		this.name = name;

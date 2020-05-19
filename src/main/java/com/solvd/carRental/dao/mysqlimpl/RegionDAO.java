@@ -4,25 +4,24 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.solvd.carRental.connectionpool.ConnectionPool;
 import com.solvd.carRental.dao.IEntityDAO;
-import com.solvd.carRental.models.CarBrand;
+import com.solvd.carRental.models.Region;
 
-public class CarBrandDAO implements IEntityDAO<CarBrand>{
-	private final static Logger LOGGER = LogManager.getLogger(CarBrandDAO.class);
-	private final static String GET_BY_ID = "select * from Car_Brands where id = ?";
-	private final static String GET_ALL = "select * from Car_Brands";
-	private final static String INSERT = "insert into Car_Brands (name) values(?)";
-	private final static String UPDATE = "update Car_Brands set name = ?  where id = ?";
-	private final static String DELETE = "delete from Car_Brands where id = ?";
+public class RegionDAO implements IEntityDAO<Region> {
+	private final static Logger LOGGER = LogManager.getLogger(RegionDAO.class);
+	private final static String GET_BY_ID = "select * from Regions where id = ?";
+	private final static String GET_ALL = "select * from Regions";
+	private final static String INSERT = "insert into Regions (id, name) values(?, ?)";
+	private final static String UPDATE = "update Regions set name = ? where id = ?";
+	private final static String DELETE = "delete from Regions where id = ?";
 	
 	@Override
-	public CarBrand getEntityById(Long id) {	
+	public Region getEntityById(Long id) {	
 		ConnectionPool cp = ConnectionPool.getInstance();
 		Connection c = null;
 		PreparedStatement ps = null;
@@ -34,11 +33,11 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 			ps.setLong(1, id);
 			rs = ps.executeQuery();
 			rs.next();
-			CarBrand carBrand = new CarBrand (
+			Region region = new Region (
 					rs.getLong("id"),
 					rs.getString("name")
 					);
-			return carBrand;
+			return region;
 		} catch (ClassNotFoundException e) {
 			LOGGER.error(e);
 		} catch (InterruptedException e) {
@@ -60,7 +59,7 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 	}
 	
 	@Override
-	public List<CarBrand> getAll() {
+	public List<Region> getAll() {
 		ConnectionPool cp = ConnectionPool.getInstance();
 		Connection c = null;
 		PreparedStatement ps = null;
@@ -70,15 +69,15 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 			c = cp.getConnection();
 			ps = c.prepareStatement(GET_ALL);
 			rs = ps.executeQuery();
-			List <CarBrand> carBrands = new ArrayList<CarBrand>();
+			List <Region> regions = new ArrayList<Region>();
 			while (rs.next()) {
-				CarBrand carBrand = new CarBrand (
+				Region region = new Region (
 						rs.getLong("id"),
 						rs.getString("name")
 						);
-				carBrands.add(carBrand);
+				regions.add(region);
 			}
-			return carBrands;
+			return regions;
 		} catch (ClassNotFoundException e) {
 			LOGGER.error(e);
 		} catch (InterruptedException e) {
@@ -100,7 +99,7 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 	}
 	
 	@Override
-	public void updateEntity(CarBrand carBrand) {	
+	public void updateEntity(Region region) {	
 		ConnectionPool cp = ConnectionPool.getInstance();
 		Connection c = null;
 		PreparedStatement ps = null;
@@ -108,8 +107,8 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement(UPDATE);
-			ps.setString(1, carBrand.getName());
-			ps.setLong(2, carBrand.getId());
+			ps.setString(1, region.getName());
+			ps.setLong(2, region.getId());
 			ps.executeUpdate();
 		} catch (ClassNotFoundException e) {
 			LOGGER.error(e);
@@ -130,20 +129,17 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 	}
 	
 	@Override
-	public void saveEntity(CarBrand carBrand) {
+	public void saveEntity(Region region) {
 		ConnectionPool cp = ConnectionPool.getInstance();
 		Connection c = null;
 		PreparedStatement ps = null;
-		ResultSet rs = null;
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
-			ps.setString(1, carBrand.getName());
+			ps = c.prepareStatement(INSERT);
+			ps.setLong(1, region.getId());
+			ps.setString(2, region.getName());
 			ps.executeUpdate();
-			rs = ps.getGeneratedKeys();
-			rs.next();
-			carBrand.setId(rs.getLong(1));
 		} catch (ClassNotFoundException e) {
 			LOGGER.error(e);
 		} catch (InterruptedException e) {
@@ -153,7 +149,6 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 		} finally {
 			try {
 				ps.close();
-				rs.close();
 				cp.releaseConnection(c);
 			} catch (InterruptedException e) {
 				LOGGER.error(e);
@@ -191,5 +186,6 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 			}
 		}
 	}
+
 
 }

@@ -4,25 +4,25 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.solvd.carRental.connectionpool.ConnectionPool;
-import com.solvd.carRental.dao.IEntityDAO;
-import com.solvd.carRental.models.CarBrand;
+import com.solvd.carRental.dao.IPhoneNumberDAO;
+import com.solvd.carRental.models.PhoneNumber;
 
-public class CarBrandDAO implements IEntityDAO<CarBrand>{
-	private final static Logger LOGGER = LogManager.getLogger(CarBrandDAO.class);
-	private final static String GET_BY_ID = "select * from Car_Brands where id = ?";
-	private final static String GET_ALL = "select * from Car_Brands";
-	private final static String INSERT = "insert into Car_Brands (name) values(?)";
-	private final static String UPDATE = "update Car_Brands set name = ?  where id = ?";
-	private final static String DELETE = "delete from Car_Brands where id = ?";
+public class PhoneNumberDAO implements IPhoneNumberDAO {
+	private final static Logger LOGGER = LogManager.getLogger(PhoneNumberDAO.class);
+	private final static String GET_BY_ID = "select * from Phone_Numbers where id = ?";
+	private final static String GET_ALL = "select * from Phone_Numbers";
+	private final static String INSERT = "insert into Phone_Numbers (id, number) values(?, ?)";
+	private final static String UPDATE = "update Phone_Numbers set number = ?  where id = ?";
+	private final static String DELETE = "delete from Phone_Numbers where id = ?";
+	private final static String GET_ALL_BY_BE_ID = "select * from Phone_Numbers where business_entity_id = ?";
 	
 	@Override
-	public CarBrand getEntityById(Long id) {	
+	public PhoneNumber getEntityById(Long id) {	
 		ConnectionPool cp = ConnectionPool.getInstance();
 		Connection c = null;
 		PreparedStatement ps = null;
@@ -34,11 +34,11 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 			ps.setLong(1, id);
 			rs = ps.executeQuery();
 			rs.next();
-			CarBrand carBrand = new CarBrand (
+			PhoneNumber phoneNumber = new PhoneNumber (
 					rs.getLong("id"),
-					rs.getString("name")
+					rs.getString("number")
 					);
-			return carBrand;
+			return phoneNumber;
 		} catch (ClassNotFoundException e) {
 			LOGGER.error(e);
 		} catch (InterruptedException e) {
@@ -60,7 +60,7 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 	}
 	
 	@Override
-	public List<CarBrand> getAll() {
+	public List<PhoneNumber> getAll() {
 		ConnectionPool cp = ConnectionPool.getInstance();
 		Connection c = null;
 		PreparedStatement ps = null;
@@ -70,15 +70,15 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 			c = cp.getConnection();
 			ps = c.prepareStatement(GET_ALL);
 			rs = ps.executeQuery();
-			List <CarBrand> carBrands = new ArrayList<CarBrand>();
+			List <PhoneNumber> phoneNumbers = new ArrayList<PhoneNumber>();
 			while (rs.next()) {
-				CarBrand carBrand = new CarBrand (
+				PhoneNumber phoneNumber = new PhoneNumber (
 						rs.getLong("id"),
-						rs.getString("name")
+						rs.getString("number")
 						);
-				carBrands.add(carBrand);
+				phoneNumbers.add(phoneNumber);
 			}
-			return carBrands;
+			return phoneNumbers;
 		} catch (ClassNotFoundException e) {
 			LOGGER.error(e);
 		} catch (InterruptedException e) {
@@ -100,7 +100,7 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 	}
 	
 	@Override
-	public void updateEntity(CarBrand carBrand) {	
+	public void updateEntity(PhoneNumber phoneNumbers) {	
 		ConnectionPool cp = ConnectionPool.getInstance();
 		Connection c = null;
 		PreparedStatement ps = null;
@@ -108,8 +108,8 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement(UPDATE);
-			ps.setString(1, carBrand.getName());
-			ps.setLong(2, carBrand.getId());
+			ps.setString(1, phoneNumbers.getNumber());
+			ps.setLong(2, phoneNumbers.getId());
 			ps.executeUpdate();
 		} catch (ClassNotFoundException e) {
 			LOGGER.error(e);
@@ -130,20 +130,17 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 	}
 	
 	@Override
-	public void saveEntity(CarBrand carBrand) {
+	public void saveEntity(PhoneNumber phoneNumbers) {
 		ConnectionPool cp = ConnectionPool.getInstance();
 		Connection c = null;
 		PreparedStatement ps = null;
-		ResultSet rs = null;
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
-			ps.setString(1, carBrand.getName());
+			ps = c.prepareStatement(INSERT);
+			ps.setLong(1, phoneNumbers.getId());
+			ps.setString(2, phoneNumbers.getNumber());
 			ps.executeUpdate();
-			rs = ps.getGeneratedKeys();
-			rs.next();
-			carBrand.setId(rs.getLong(1));
 		} catch (ClassNotFoundException e) {
 			LOGGER.error(e);
 		} catch (InterruptedException e) {
@@ -153,7 +150,6 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 		} finally {
 			try {
 				ps.close();
-				rs.close();
 				cp.releaseConnection(c);
 			} catch (InterruptedException e) {
 				LOGGER.error(e);
@@ -190,6 +186,47 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 				LOGGER.error(e);
 			}
 		}
+	}
+	
+	@Override
+	public List<PhoneNumber> getAllByBusinessEntityId(Long id) {
+		ConnectionPool cp = ConnectionPool.getInstance();
+		Connection c = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			c = cp.getConnection();
+			ps = c.prepareStatement(GET_ALL_BY_BE_ID);
+			ps.setLong(1, id);
+			rs = ps.executeQuery();
+			List <PhoneNumber> phoneNumbers = new ArrayList<PhoneNumber>();
+			while (rs.next()) {
+				PhoneNumber phoneNumber = new PhoneNumber (
+						rs.getLong("id"),
+						rs.getString("number")
+						);
+				phoneNumbers.add(phoneNumber);
+			}
+			return phoneNumbers;
+		} catch (ClassNotFoundException e) {
+			LOGGER.error(e);
+		} catch (InterruptedException e) {
+			LOGGER.error(e);
+		} catch (SQLException e) {
+			LOGGER.error(e);
+		} finally {
+			try {
+				ps.close();
+				rs.close();
+				cp.releaseConnection(c);
+			} catch (InterruptedException e) {
+				LOGGER.error(e);
+			} catch (SQLException e) {
+				LOGGER.error(e);
+			}
+		}
+		return null;
 	}
 
 }
