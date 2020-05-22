@@ -52,11 +52,11 @@ values('Cancelled');
 insert into Payment_Types (name)
 values('Credit Card');
 
-insert into People (id, first_name, last_name, birth_date, national_gvt_id, business_entity_id)
-values (2, 'John', 'Smith', '1975-03-10', 15487654, 2); 
+insert into People (id, first_name, last_name, birth_date, national_gvt_id)
+values (2, 'John', 'Smith', '1975-03-10', 15487654); 
 
-insert into Customers (id, email_address, person_id)
-values (2, 'johnsmith@mymail.com', 2); 
+insert into Customers (id, email_address)
+values (2, 'johnsmith@mymail.com'); 
 
 insert into Phone_Numbers (business_entity_id, phone_number)
 values (2, '(212) 861-2456');
@@ -76,11 +76,11 @@ values ('Child Seat 3-6M', 1);
 insert into Reservations (pickup_date_time, return_date_time, confirmation_number, pickup_location_id, return_location_id, customer_id, status_id, car_id)
 values ('2020-04-30 10:30:00', '2020-05-03 14:30:00', 4587964, 1, 1, 2, 1, 1);
 
-insert into People (id, first_name, last_name, birth_date, national_gvt_id, business_entity_id)
-values (3, 'Chris', 'Moore', '1990-07-08', 5487123, 3); 
+insert into People (id, first_name, last_name, birth_date, national_gvt_id)
+values (3, 'Chris', 'Moore', '1990-07-08', 5487123); 
 
-insert into Employees (id, hire_date, position_id, location_id, person_id)
-values (3, '2019-03-06', 2, 1, 3);
+insert into Employees (id, hire_date, position_id, location_id)
+values (3, '2019-03-06', 2, 1);
 
 insert into Rentals (reservation_id, employee_id)
 values (1,3);

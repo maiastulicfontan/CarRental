@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -16,7 +17,7 @@ public class CarModelDAO implements IEntityDAO<CarModel> {
 	private final static Logger LOGGER = LogManager.getLogger(CarModelDAO.class);
 	private final static String GET_BY_ID = "select * from Car_Models where id = ?";
 	private final static String GET_ALL = "select * from Car_Models";
-	private final static String INSERT = "insert into Car_Models (id, name, description, transmission, number_of_seats, airbag_info, luggage_space, fuel_consumption, cost_per_day) values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	private final static String INSERT = "insert into Car_Models (name, description, transmission, number_of_seats, airbag_info, luggage_space, fuel_consumption, cost_per_day) values(?, ?, ?, ?, ?, ?, ?, ?)";
 	private final static String UPDATE = "update Car_Models set name = ?, description = ?, transmission = ?, number_of_seats = ?, airbag_info = ?, luggage_space = ?, fuel_consumption = ?, cost_per_day = ?  where id = ?";
 	private final static String DELETE = "delete from Car_Models where id = ?";
 	
@@ -154,20 +155,26 @@ public class CarModelDAO implements IEntityDAO<CarModel> {
 		ConnectionPool cp = ConnectionPool.getInstance();
 		Connection c = null;
 		PreparedStatement ps = null;
+		ResultSet generatedKeys = null;
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement(INSERT);
-			ps.setLong(1, carModel.getId());
-			ps.setString(2, carModel.getName());
-			ps.setString(3, carModel.getDescription());
-			ps.setString(4, carModel.getTransmission());
-			ps.setInt (5, carModel.getNumberOfSeats());
-			ps.setString(6, carModel.getAirbagInfo());
-			ps.setString(7, carModel.getLuggageSpace());
-			ps.setString(8, carModel.getFuelConsumption());
-			ps.setDouble(9, carModel.getCostPerDay());
+			ps = c.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
+			ps.setString(1, carModel.getName());
+			ps.setString(2, carModel.getDescription());
+			ps.setString(3, carModel.getTransmission());
+			ps.setInt (4, carModel.getNumberOfSeats());
+			ps.setString(5, carModel.getAirbagInfo());
+			ps.setString(6, carModel.getLuggageSpace());
+			ps.setString(7, carModel.getFuelConsumption());
+			ps.setDouble(8, carModel.getCostPerDay());
 			ps.executeUpdate();
+			generatedKeys = ps.getGeneratedKeys();
+			if (generatedKeys.next()) {
+				carModel.setId(generatedKeys.getLong(1));
+			} else {
+				throw new SQLException("Could not get id, fail in creating record");
+			}
 		} catch (ClassNotFoundException e) {
 			LOGGER.error(e);
 		} catch (InterruptedException e) {
@@ -177,6 +184,7 @@ public class CarModelDAO implements IEntityDAO<CarModel> {
 		} finally {
 			try {
 				ps.close();
+				generatedKeys.close();
 				cp.releaseConnection(c);
 			} catch (InterruptedException e) {
 				LOGGER.error(e);

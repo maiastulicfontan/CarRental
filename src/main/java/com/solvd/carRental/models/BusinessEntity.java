@@ -3,7 +3,7 @@ package com.solvd.carRental.models;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BusinessEntity {
+public abstract class BusinessEntity {
 	private Long id;
 	private List <Address> addresses = new ArrayList<Address>();
 	private List <PhoneNumber> phoneNumbers = new ArrayList<PhoneNumber>();

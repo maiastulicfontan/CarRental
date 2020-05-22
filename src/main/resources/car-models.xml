@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<car-models>
+    <car-model id="1">
+        <name>Up</name>
+        <description></description>
+        <transmission>Manual</transmission>
+        <number-of-seats>4</number-of-seats>
+        <airbag-info>Dual airbags</airbag-info>
+        <luggage-space>1 Large Suitcase</luggage-space>
+        <fuel-consumption>12 km/liters</fuel-consumption>
+        <cost-per-day>25</cost-per-day>
+        <carbrand id="1">
+            <name>Volkswagen</name>
+        </carbrand>
+        <car-type id="2">
+            <name>Economic</name>
+        </car-type>
+    </car-model>
+
+    <car-model id="2">
+        <name>Versa</name>
+        <description></description>
+        <transmission>Automatic</transmission>
+        <number-of-seats>5</number-of-seats>
+        <airbag-info>Dual airbags</airbag-info>
+        <luggage-space>2 Large Suitcases, 2 Small Suitcases</luggage-space>
+        <fuel-consumption>10 km/liters</fuel-consumption>
+        <cost-per-day>35</cost-per-day>
+        <carbrand id="2">
+            <name>Nissan</name>
+        </carbrand>
+        <car-type id="1">
+            <name>Sedan</name>
+        </car-type>
+    </car-model>
+
+    <car-model id="3">
+        <name>Cobalt</name>
+        <description></description>
+        <transmission>Manual</transmission>
+        <number-of-seats>5</number-of-seats>
+        <airbag-info>Dual airbags</airbag-info>
+        <luggage-space>2 Large Suitcases, 2 Small Suitcases</luggage-space>
+        <fuel-consumption>11 km/liters</fuel-consumption>
+        <cost-per-day>30</cost-per-day>
+        <carbrand id="3">
+            <name>Chevrolet</name>
+        </carbrand>
+        <car-type id="1">
+            <name>Sedan</name>
+        </car-type>
+    </car-model>
+</car-models>

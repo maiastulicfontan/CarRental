@@ -42,4 +42,9 @@ public class CarType {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	@Override
+	public String toString() {
+		return "CarType [id=" + id + ", name=" + name + ", description=" + description + "]";
+	}
 }

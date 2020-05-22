@@ -1,17 +1,18 @@
 package com.solvd.carRental.models;
 
-import java.sql.Date;
+
+import java.time.LocalDate;
 
 public class DriverLicense {
 	private Long id;
 	private Customer customer;
 	private Long number;
-	private Date validFrom;
-	private Date expiration;
+	private LocalDate validFrom;
+	private LocalDate expiration;
 	
 	public DriverLicense () {}
 	
-	public DriverLicense(Long id, Customer customer, Long number, Date validFrom, Date expirationDate) {
+	public DriverLicense(Long id, Customer customer, Long number, LocalDate validFrom, LocalDate expirationDate) {
 		this.id = id;
 		this.customer = customer;
 		this.number = number;
@@ -19,7 +20,7 @@ public class DriverLicense {
 		this.expiration = expirationDate;
 	}
 
-	public DriverLicense(Long id, Long number, Date validFrom, Date expirationDate) {
+	public DriverLicense(Long id, Long number, LocalDate validFrom, LocalDate expirationDate) {
 		super();
 		this.id = id;
 		this.number = number;
@@ -51,19 +52,19 @@ public class DriverLicense {
 		this.number = number;
 	}
 
-	public Date getValidFrom() {
+	public LocalDate getValidFrom() {
 		return validFrom;
 	}
 
-	public void setValidFrom(Date validFrom) {
+	public void setValidFrom(LocalDate validFrom) {
 		this.validFrom = validFrom;
 	}
 
-	public Date getExpiration() {
+	public LocalDate getExpiration() {
 		return expiration;
 	}
 
-	public void setExpiration(Date expirationDate) {
+	public void setExpiration(LocalDate expirationDate) {
 		this.expiration = expirationDate;
 	}
 }

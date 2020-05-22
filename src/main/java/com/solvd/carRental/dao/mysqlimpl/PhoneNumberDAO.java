@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -16,8 +17,8 @@ public class PhoneNumberDAO implements IPhoneNumberDAO {
 	private final static Logger LOGGER = LogManager.getLogger(PhoneNumberDAO.class);
 	private final static String GET_BY_ID = "select * from Phone_Numbers where id = ?";
 	private final static String GET_ALL = "select * from Phone_Numbers";
-	private final static String INSERT = "insert into Phone_Numbers (id, number) values(?, ?)";
-	private final static String UPDATE = "update Phone_Numbers set number = ?  where id = ?";
+	private final static String INSERT = "insert into Phone_Numbers (phone_number) values(?)";
+	private final static String UPDATE = "update Phone_Numbers set phone_number = ?  where id = ?";
 	private final static String DELETE = "delete from Phone_Numbers where id = ?";
 	private final static String GET_ALL_BY_BE_ID = "select * from Phone_Numbers where business_entity_id = ?";
 	
@@ -130,17 +131,23 @@ public class PhoneNumberDAO implements IPhoneNumberDAO {
 	}
 	
 	@Override
-	public void saveEntity(PhoneNumber phoneNumbers) {
+	public void saveEntity(PhoneNumber phoneNumber) {
 		ConnectionPool cp = ConnectionPool.getInstance();
 		Connection c = null;
 		PreparedStatement ps = null;
+		ResultSet generatedKeys = null;
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement(INSERT);
-			ps.setLong(1, phoneNumbers.getId());
-			ps.setString(2, phoneNumbers.getNumber());
+			ps = c.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
+			ps.setString(1, phoneNumber.getNumber());
 			ps.executeUpdate();
+			generatedKeys = ps.getGeneratedKeys();
+			if (generatedKeys.next()) {
+				phoneNumber.setId(generatedKeys.getLong(1));
+			} else {
+				throw new SQLException("Could not get id, fail in creating record");
+			}
 		} catch (ClassNotFoundException e) {
 			LOGGER.error(e);
 		} catch (InterruptedException e) {
@@ -150,6 +157,7 @@ public class PhoneNumberDAO implements IPhoneNumberDAO {
 		} finally {
 			try {
 				ps.close();
+				generatedKeys.close();
 				cp.releaseConnection(c);
 			} catch (InterruptedException e) {
 				LOGGER.error(e);
@@ -204,7 +212,7 @@ public class PhoneNumberDAO implements IPhoneNumberDAO {
 			while (rs.next()) {
 				PhoneNumber phoneNumber = new PhoneNumber (
 						rs.getLong("id"),
-						rs.getString("number")
+						rs.getString("phone_number")
 						);
 				phoneNumbers.add(phoneNumber);
 			}

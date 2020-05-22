@@ -1,15 +1,23 @@
 package com.solvd.carRental;
 
 
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.solvd.carRental.dao.mysqlimpl.CarBrandDAO;
 import com.solvd.carRental.dao.mysqlimpl.CreditCardDAO;
 import com.solvd.carRental.dao.mysqlimpl.CustomerDAO;
+import com.solvd.carRental.models.Car;
 import com.solvd.carRental.models.CarBrand;
+import com.solvd.carRental.models.CarModel;
 import com.solvd.carRental.models.Customer;
+import com.solvd.carRental.models.Employee;
 import com.solvd.carRental.services.CustomerService;
+import com.solvd.carRental.xmldomparser.CarModelParser;
+import com.solvd.carRental.xmldomparser.CarParser;
+import com.solvd.carRental.xmldomparser.EmployeeParser;
 
 public class CarRentalRunner {
 	private static Logger LOGGER = LogManager.getLogger(CarRentalRunner.class);
@@ -42,6 +50,18 @@ public class CarRentalRunner {
 		LOGGER.info(carBrandDao.getAll());
 		
 		
+		EmployeeParser empParser = new EmployeeParser();
+		List<Employee> employees = empParser.parseEmployees();
+		LOGGER.info(employees.get(0).getPosition());
+		
+		CarParser carParser = new CarParser();
+		List<Car> cars = carParser.parseCars();
+		LOGGER.info(cars);
+		
+		CarModelParser carModParser = new CarModelParser();
+		List<CarModel> carModels = carModParser.parseCarModels();
+		LOGGER.info(carModels.get(1).getBrand());
+		LOGGER.info(carModels.get(1).getType());
 	}
 
 }

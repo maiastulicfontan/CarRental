@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -16,7 +17,7 @@ public class CreditCardDAO implements ICreditCardDAO{
 	private final static Logger LOGGER = LogManager.getLogger(CreditCardDAO.class);
 	private final static String GET_BY_ID = "select * from Credit_Cards where id = ?";
 	private final static String GET_ALL = "select * from Credit_Cards";
-	private final static String INSERT = "insert into Credit_Cards (id, number, valid_from, expiration) values(?, ?, ?, ?)";
+	private final static String INSERT = "insert into Credit_Cards (number, valid_from, expiration) values(?, ?, ?)";
 	private final static String UPDATE = "update Credit_Cards set number = ?, valid_from = ?, expiration = ?  where id = ?";
 	private final static String DELETE = "delete from Credit_Cards where id = ?";
 	
@@ -141,15 +142,21 @@ public class CreditCardDAO implements ICreditCardDAO{
 		ConnectionPool cp = ConnectionPool.getInstance();
 		Connection c = null;
 		PreparedStatement ps = null;
+		ResultSet generatedKeys = null;
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement(INSERT);
-			ps.setLong(1, creditCard.getId());
-			ps.setInt(2, creditCard.getNumber());
-			ps.setString(3, creditCard.getValidFrom());
-			ps.setString(4, creditCard.getExpiration());
+			ps = c.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
+			ps.setInt(1, creditCard.getNumber());
+			ps.setString(2, creditCard.getValidFrom());
+			ps.setString(3, creditCard.getExpiration());
 			ps.executeUpdate();
+			generatedKeys = ps.getGeneratedKeys();
+			if (generatedKeys.next()) {
+				creditCard.setId(generatedKeys.getLong(1));
+			} else {
+				throw new SQLException("Could not get id, fail in creating record");
+			}
 		} catch (ClassNotFoundException e) {
 			LOGGER.error(e);
 		} catch (InterruptedException e) {
@@ -159,6 +166,7 @@ public class CreditCardDAO implements ICreditCardDAO{
 		} finally {
 			try {
 				ps.close();
+				generatedKeys.close();
 				cp.releaseConnection(c);
 			} catch (InterruptedException e) {
 				LOGGER.error(e);

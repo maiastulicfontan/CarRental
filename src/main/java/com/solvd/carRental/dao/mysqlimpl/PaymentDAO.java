@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -16,7 +17,7 @@ public class PaymentDAO implements IEntityDAO<Payment> {
 	private final static Logger LOGGER = LogManager.getLogger(PaymentDAO.class);
 	private final static String GET_BY_ID = "select * from Payments where id = ?";
 	private final static String GET_ALL = "select * from Payments";
-	private final static String INSERT = "insert into Payments (id, date) values(?, ?)";
+	private final static String INSERT = "insert into Payments (date) values(?)";
 	private final static String UPDATE = "update Payments set date = ?  where id = ?";
 	private final static String DELETE = "delete from Payments where id = ?";
 	
@@ -133,13 +134,19 @@ public class PaymentDAO implements IEntityDAO<Payment> {
 		ConnectionPool cp = ConnectionPool.getInstance();
 		Connection c = null;
 		PreparedStatement ps = null;
+		ResultSet generatedKeys = null;
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement(INSERT);
-			ps.setLong(1, payment.getId());
-			ps.setDate(2, payment.getDate());
+			ps = c.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
+			ps.setDate(1, payment.getDate());
 			ps.executeUpdate();
+			generatedKeys = ps.getGeneratedKeys();
+			if (generatedKeys.next()) {
+				payment.setId(generatedKeys.getLong(1));
+			} else {
+				throw new SQLException("Could not get id, fail in creating record");
+			}
 		} catch (ClassNotFoundException e) {
 			LOGGER.error(e);
 		} catch (InterruptedException e) {
@@ -149,6 +156,7 @@ public class PaymentDAO implements IEntityDAO<Payment> {
 		} finally {
 			try {
 				ps.close();
+				generatedKeys.close();
 				cp.releaseConnection(c);
 			} catch (InterruptedException e) {
 				LOGGER.error(e);

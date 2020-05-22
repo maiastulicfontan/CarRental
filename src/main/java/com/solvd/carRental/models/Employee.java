@@ -1,12 +1,10 @@
 package com.solvd.carRental.models;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 
-public class Employee {
-	private Long id;
-	private Person person;
-	private Date hireDate;
+public class Employee extends Person {
+	private LocalDate hireDate;
 	private EmployeePosition position;
 	
 	public Employee () {}
@@ -14,38 +12,28 @@ public class Employee {
 	public Employee(EmployeePosition position) {
 		this.position = position;
 	}
+	
+	public Employee(Long id, String firstName, String lastName, LocalDate birthDate, String nationalGovernmentId, LocalDate hireDate) {
+		super(id, firstName, lastName, birthDate, nationalGovernmentId);
+		this.hireDate = hireDate;
+	}
 
-	public Employee(Date hireDate, EmployeePosition position) {
+	public Employee(Long id, String firstName, String lastName, LocalDate birthDate, String nationalGovernmentId, LocalDate hireDate, EmployeePosition position) {
+		super(id, firstName, lastName, birthDate, nationalGovernmentId);
 		this.hireDate = hireDate;
 		this.position = position;
 	}
 
-
-	public Employee(Person person, Date hireDate, EmployeePosition position) {
-		super();
-		this.person = person;
-		this.hireDate = hireDate;
-		this.position = position;
-	}
-
-	public Employee(Long id, Date hireDate) {
-		this.id = id;
+	public Employee(Long id, LocalDate hireDate) {
+		super(id);
 		this.hireDate = hireDate;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Date getHireDate() {
+	public LocalDate getHireDate() {
 		return hireDate;
 	}
 
-	public void setHireDate(Date hireDate) {
+	public void setHireDate(LocalDate hireDate) {
 		this.hireDate = hireDate;
 	}
 
@@ -56,12 +44,13 @@ public class Employee {
 	public void setPosition(EmployeePosition position) {
 		this.position = position;
 	}
-
-	public Person getPerson() {
-		return person;
+	
+	@Override
+	public String toString() {
+		return "Employee [id: " + getId() + ", First Name: " + getFirstName() + ", Last Name: "
+				+ getLastName() + ", Birth Date: " + getBirthDate() + ", National Government Id: "
+				+ getNationalGovernmentId() + ", Hire Date: " + hireDate + "]";
+	
 	}
 
-	public void setPerson(Person person) {
-		this.person = person;
-	}
 }

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -16,7 +17,7 @@ public class SpecialServiceDAO implements IEntityDAO<SpecialService>{
 	private final static Logger LOGGER = LogManager.getLogger(SpecialServiceDAO.class);
 	private final static String GET_BY_ID = "select * from Special_Services where id = ?";
 	private final static String GET_ALL = "select * from Special_Services";
-	private final static String INSERT = "insert into Special_Services (id, name) values(?, ?)";
+	private final static String INSERT = "insert into Special_Services (name) values(?)";
 	private final static String UPDATE = "update Special_Services set name = ? where id = ?";
 	private final static String DELETE = "delete from Special_Services where id = ?";
 	
@@ -133,13 +134,19 @@ public class SpecialServiceDAO implements IEntityDAO<SpecialService>{
 		ConnectionPool cp = ConnectionPool.getInstance();
 		Connection c = null;
 		PreparedStatement ps = null;
+		ResultSet generatedKeys = null;
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement(INSERT);
-			ps.setLong(1, specialService.getId());
-			ps.setString(2, specialService.getName());
+			ps = c.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
+			ps.setString(1, specialService.getName());
 			ps.executeUpdate();
+			generatedKeys = ps.getGeneratedKeys();
+			if (generatedKeys.next()) {
+				specialService.setId(generatedKeys.getLong(1));
+			} else {
+				throw new SQLException("Could not get id, fail in creating record");
+			}
 		} catch (ClassNotFoundException e) {
 			LOGGER.error(e);
 		} catch (InterruptedException e) {
@@ -149,6 +156,7 @@ public class SpecialServiceDAO implements IEntityDAO<SpecialService>{
 		} finally {
 			try {
 				ps.close();
+				generatedKeys.close();
 				cp.releaseConnection(c);
 			} catch (InterruptedException e) {
 				LOGGER.error(e);

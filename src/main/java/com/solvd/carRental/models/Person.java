@@ -1,53 +1,34 @@
 package com.solvd.carRental.models;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 
-public class Person {
-	private Long id;
-	private BusinessEntity be;
+public abstract class Person extends BusinessEntity {
 	private String firstName;
 	private String lastName;
-	private Date birthDate;
+	private LocalDate birthDate;
 	private String nationalGovernmentId;
 	
 	public Person () {}
 	
-	public Person(Long id, String firstName, String lastName, Date birthDate, String nationalGovernmentId) {
-		super();
-		this.id = id;
+	public Person (Long id) {
+		super(id);
+	}
+	
+	public Person(Long id, String firstName, String lastName, LocalDate birthDate, String nationalGovernmentId) {
+		super(id);
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.birthDate = birthDate;
 		this.nationalGovernmentId = nationalGovernmentId;
 	}
 
-	public Person(BusinessEntity be, String firstName, String lastName, Date birthDate,String nationalGovernmentId) {
-		this.be = be;
+	public Person(String firstName, String lastName, LocalDate birthDate,String nationalGovernmentId) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.birthDate = birthDate;
 		this.nationalGovernmentId = nationalGovernmentId;
 	}
-
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public BusinessEntity getBe() {
-		return be;
-	}
-
-
-	public void setBe(BusinessEntity be) {
-		this.be = be;
-	}
-
 
 	public String getFirstName() {
 		return firstName;
@@ -69,12 +50,12 @@ public class Person {
 	}
 
 
-	public Date getBirthDate() {
+	public LocalDate getBirthDate() {
 		return birthDate;
 	}
 
 
-	public void setBirthDate(Date birthDate) {
+	public void setBirthDate(LocalDate birthDate) {
 		this.birthDate = birthDate;
 	}
 

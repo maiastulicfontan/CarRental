@@ -80,6 +80,12 @@ public class Car {
 	public void setModel(CarModel model) {
 		this.model = model;
 	}
+
+	@Override
+	public String toString() {
+		return "Car [id: " + id + ", License Plate: " + licensePlate + ", Model Year: " + modelYear + ", Color: " + color
+				+ "]";
+	}
 	
 	
 	

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -16,7 +17,7 @@ public class EmployeePositionDAO implements IEntityDAO<EmployeePosition>{
 	private final static Logger LOGGER = LogManager.getLogger(EmployeePositionDAO.class);
 	private final static String GET_BY_ID = "select * from Employee_Positions where id = ?";
 	private final static String GET_ALL = "select * from Employee_Positions";
-	private final static String INSERT = "insert into Employee_Positions (id, name, description, salary) values(?, ?, ?, ?)";
+	private final static String INSERT = "insert into Employee_Positions (name, description, salary) values(?, ?, ?)";
 	private final static String UPDATE = "update Employee_Positions set name = ?, description = ?, salary = ?  where id = ?";
 	private final static String DELETE = "delete from Employee_Positions where id = ?";
 
@@ -139,15 +140,21 @@ public class EmployeePositionDAO implements IEntityDAO<EmployeePosition>{
 		ConnectionPool cp = ConnectionPool.getInstance();
 		Connection c = null;
 		PreparedStatement ps = null;
+		ResultSet generatedKeys = null;
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement(INSERT);
-			ps.setLong(1, employeePosition.getId());
-			ps.setString(2, employeePosition.getName());
-			ps.setString(3, employeePosition.getDescription());
-			ps.setDouble(4, employeePosition.getSalary());
+			ps = c.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
+			ps.setString(1, employeePosition.getName());
+			ps.setString(2, employeePosition.getDescription());
+			ps.setDouble(3, employeePosition.getSalary());
 			ps.executeUpdate();
+			generatedKeys = ps.getGeneratedKeys();
+			if (generatedKeys.next()) {
+				employeePosition.setId(generatedKeys.getLong(1));
+			} else {
+				throw new SQLException("Could not get id, fail in creating record");
+			}
 		} catch (ClassNotFoundException e) {
 			LOGGER.error(e);
 		} catch (InterruptedException e) {
@@ -157,6 +164,7 @@ public class EmployeePositionDAO implements IEntityDAO<EmployeePosition>{
 		} finally {
 			try {
 				ps.close();
+				generatedKeys.close();
 				cp.releaseConnection(c);
 			} catch (InterruptedException e) {
 				LOGGER.error(e);

@@ -3,16 +3,16 @@ package com.solvd.carRental.models;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.Date;
-import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Reservation {
 	private Long id;
-	private Timestamp pickupDateTime;
-	private Timestamp returnDateTime;
+	private LocalDateTime pickupDateTime;
+	private LocalDateTime returnDateTime;
 	private Double cost;
 	private Long confirmationNumber;
-	private Date creationDate;
+	private LocalDate creationDate;
 	private Location pickupLocation;
 	private Location returnLocation;
 	private Customer customer;
@@ -23,8 +23,8 @@ public class Reservation {
 	public Reservation () {}
 	
 	
-	public Reservation(Long id, Timestamp pickupDateTime, Timestamp returnDateTime, Double cost,
-			Long confirmationNumber, Date creationDate) {
+	public Reservation(Long id, LocalDateTime pickupDateTime, LocalDateTime returnDateTime, Double cost,
+			Long confirmationNumber, LocalDate creationDate) {
 		this.id = id;
 		this.pickupDateTime = pickupDateTime;
 		this.returnDateTime = returnDateTime;
@@ -34,8 +34,8 @@ public class Reservation {
 	}
 
 
-	public Reservation(Long id, Timestamp pickupDateTime, Timestamp returnDateTime, Double cost,
-			Long confirmationNumber, Date creationDate, Location pickupLocation, Customer customer, Car car,
+	public Reservation(Long id, LocalDateTime pickupDateTime, LocalDateTime returnDateTime, Double cost,
+			Long confirmationNumber, LocalDate creationDate, Location pickupLocation, Customer customer, Car car,
 			ReservationStatus status) {
 		this.id = id;
 		this.pickupDateTime = pickupDateTime;
@@ -50,8 +50,8 @@ public class Reservation {
 	}
 
 
-	public Reservation(Long id, Timestamp pickupDateTime, Timestamp returnDateTime, Double cost,
-			Long confirmationNumber, Date creationDate, Location pickupLocation, Location returnLocation,
+	public Reservation(Long id, LocalDateTime pickupDateTime, LocalDateTime returnDateTime, Double cost,
+			Long confirmationNumber, LocalDate creationDate, Location pickupLocation, Location returnLocation,
 			Customer customer, Car car, ReservationStatus status) {
 		super();
 		this.id = id;
@@ -78,22 +78,22 @@ public class Reservation {
 	}
 
 
-	public Timestamp getPickupDateTime() {
+	public LocalDateTime getPickupDateTime() {
 		return pickupDateTime;
 	}
 
 
-	public void setPickupDateTime(Timestamp pickupDateTime) {
+	public void setPickupDateTime(LocalDateTime pickupDateTime) {
 		this.pickupDateTime = pickupDateTime;
 	}
 
 
-	public Timestamp getReturnDateTime() {
+	public LocalDateTime getReturnDateTime() {
 		return returnDateTime;
 	}
 
 
-	public void setReturnDateTime(Timestamp returnDateTime) {
+	public void setReturnDateTime(LocalDateTime returnDateTime) {
 		this.returnDateTime = returnDateTime;
 	}
 
@@ -118,12 +118,12 @@ public class Reservation {
 	}
 
 
-	public Date getCreationDate() {
+	public LocalDate getCreationDate() {
 		return creationDate;
 	}
 
 
-	public void setCreationDate(Date creationDate) {
+	public void setCreationDate(LocalDate creationDate) {
 		this.creationDate = creationDate;
 	}
 

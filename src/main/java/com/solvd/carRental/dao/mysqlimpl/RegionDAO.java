@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -16,7 +17,7 @@ public class RegionDAO implements IEntityDAO<Region> {
 	private final static Logger LOGGER = LogManager.getLogger(RegionDAO.class);
 	private final static String GET_BY_ID = "select * from Regions where id = ?";
 	private final static String GET_ALL = "select * from Regions";
-	private final static String INSERT = "insert into Regions (id, name) values(?, ?)";
+	private final static String INSERT = "insert into Regions (name) values(?)";
 	private final static String UPDATE = "update Regions set name = ? where id = ?";
 	private final static String DELETE = "delete from Regions where id = ?";
 	
@@ -133,13 +134,19 @@ public class RegionDAO implements IEntityDAO<Region> {
 		ConnectionPool cp = ConnectionPool.getInstance();
 		Connection c = null;
 		PreparedStatement ps = null;
+		ResultSet generatedKeys = null;
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement(INSERT);
-			ps.setLong(1, region.getId());
-			ps.setString(2, region.getName());
+			ps = c.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
+			ps.setString(1, region.getName());
 			ps.executeUpdate();
+			generatedKeys = ps.getGeneratedKeys();
+			if (generatedKeys.next()) {
+				region.setId(generatedKeys.getLong(1));
+			} else {
+				throw new SQLException("Could not get id, fail in creating record");
+			}
 		} catch (ClassNotFoundException e) {
 			LOGGER.error(e);
 		} catch (InterruptedException e) {
@@ -149,6 +156,7 @@ public class RegionDAO implements IEntityDAO<Region> {
 		} finally {
 			try {
 				ps.close();
+				generatedKeys.close();
 				cp.releaseConnection(c);
 			} catch (InterruptedException e) {
 				LOGGER.error(e);

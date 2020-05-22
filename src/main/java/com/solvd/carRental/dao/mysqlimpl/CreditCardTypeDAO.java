@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -16,7 +17,7 @@ public class CreditCardTypeDAO implements IEntityDAO<CreditCardType> {
 	private final static Logger LOGGER = LogManager.getLogger(CreditCardTypeDAO.class);
 	private final static String GET_BY_ID = "select * from Credit_Card_Types where id = ?";
 	private final static String GET_ALL = "select * from Credit_Card_Types";
-	private final static String INSERT = "insert into Credit_Card_Types (id, name) values(?, ?)";
+	private final static String INSERT = "insert into Credit_Card_Types (name) values(?)";
 	private final static String UPDATE = "update Credit_Car_Types set name = ? where id = ?";
 	private final static String DELETE = "delete from Credit_Card_Types where id = ?";
 	
@@ -133,13 +134,19 @@ public class CreditCardTypeDAO implements IEntityDAO<CreditCardType> {
 		ConnectionPool cp = ConnectionPool.getInstance();
 		Connection c = null;
 		PreparedStatement ps = null;
+		ResultSet generatedKeys = null;
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement(INSERT);
-			ps.setLong(1, creditCardType.getId());
-			ps.setString(2, creditCardType.getName());
+			ps = c.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
+			ps.setString(1, creditCardType.getName());
 			ps.executeUpdate();
+			generatedKeys = ps.getGeneratedKeys();
+			if (generatedKeys.next()) {
+				creditCardType.setId(generatedKeys.getLong(1));
+			} else {
+				throw new SQLException("Could not get id, fail in creating record");
+			}
 		} catch (ClassNotFoundException e) {
 			LOGGER.error(e);
 		} catch (InterruptedException e) {
@@ -149,6 +156,7 @@ public class CreditCardTypeDAO implements IEntityDAO<CreditCardType> {
 		} finally {
 			try {
 				ps.close();
+				generatedKeys.close();
 				cp.releaseConnection(c);
 			} catch (InterruptedException e) {
 				LOGGER.error(e);
