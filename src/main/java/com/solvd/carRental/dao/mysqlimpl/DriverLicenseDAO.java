@@ -30,34 +30,33 @@ public class DriverLicenseDAO implements IDriverLicenseDAO{
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement(GET_BY_ID);
 			ps.setLong(1, id);
 			rs = ps.executeQuery();
 			rs.next();
-			DriverLicense driverLicense = new DriverLicense (
-					rs.getLong("id"),
-					rs.getLong("number"),
-					rs.getDate("valid_from").toLocalDate(),
-					rs.getDate("expiration").toLocalDate()
-					);
-			return driverLicense;
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
+			return this.buildEntity(rs);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
 			try {
-				ps.close();
 				rs.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try { 
+					ps.close();
+				} catch (SQLException e) {
+					LOGGER.error(e);
+				} finally {
+					try {
+						cp.releaseConnection(c);
+					} catch (InterruptedException e) {
+						LOGGER.error(e);
+					}
+				}
 			}
 		}
 		return null;
@@ -70,36 +69,35 @@ public class DriverLicenseDAO implements IDriverLicenseDAO{
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement(GET_ALL);
 			rs = ps.executeQuery();
 			List <DriverLicense> driverLicenses = new ArrayList<DriverLicense>();
 			while (rs.next()) {
-				DriverLicense driverLicense = new DriverLicense (
-						rs.getLong("id"),
-						rs.getLong("number"),
-						rs.getDate("valid_from").toLocalDate(),
-						rs.getDate("expiration").toLocalDate()
-						);
-				driverLicenses.add(driverLicense);
+				driverLicenses.add(this.buildEntity(rs));
 			}
 			return driverLicenses;
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
 			try {
-				ps.close();
 				rs.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try { 
+					ps.close();
+				} catch (SQLException e) {
+					LOGGER.error(e);
+				} finally {
+					try {
+						cp.releaseConnection(c);
+					} catch (InterruptedException e) {
+						LOGGER.error(e);
+					}
+				}
 			}
 		}
 		return null;
@@ -111,7 +109,6 @@ public class DriverLicenseDAO implements IDriverLicenseDAO{
 		Connection c = null;
 		PreparedStatement ps = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement(UPDATE);
 			ps.setLong(1, driverLicense.getNumber());
@@ -119,20 +116,21 @@ public class DriverLicenseDAO implements IDriverLicenseDAO{
 			ps.setDate(3, Date.valueOf(driverLicense.getExpiration()));
 			ps.setLong(4, driverLicense.getId());
 			ps.executeUpdate();
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
-			try {
+			try { 
 				ps.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try {
+					cp.releaseConnection(c);
+				} catch (InterruptedException e) {
+					LOGGER.error(e);
+				}
 			}
 		}
 	}
@@ -144,7 +142,6 @@ public class DriverLicenseDAO implements IDriverLicenseDAO{
 		PreparedStatement ps = null;
 		ResultSet generatedKeys = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
 			ps.setLong(1, driverLicense.getNumber());
@@ -157,21 +154,27 @@ public class DriverLicenseDAO implements IDriverLicenseDAO{
 			} else {
 				throw new SQLException("Could not get id, fail in creating record");
 			}
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
 			try {
-				ps.close();
 				generatedKeys.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try { 
+					ps.close();
+				} catch (SQLException e) {
+					LOGGER.error(e);
+				} finally {
+					try {
+						cp.releaseConnection(c);
+					} catch (InterruptedException e) {
+						LOGGER.error(e);
+					}
+				}
 			}
 		}
 	}
@@ -182,25 +185,25 @@ public class DriverLicenseDAO implements IDriverLicenseDAO{
 		Connection c = null;
 		PreparedStatement ps = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement(DELETE);
 			ps.setLong(1, id);
 			ps.executeUpdate();
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
-			try {
+			try { 
 				ps.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try {
+					cp.releaseConnection(c);
+				} catch (InterruptedException e) {
+					LOGGER.error(e);
+				}
 			}
 		}
 	}
@@ -212,37 +215,47 @@ public class DriverLicenseDAO implements IDriverLicenseDAO{
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement(GET_BY_CUSTOMER_ID);
 			ps.setLong(1, id);
 			rs = ps.executeQuery();
 			rs.next();
-			DriverLicense driverLicense = new DriverLicense (
-					rs.getLong("id"),
-					rs.getLong("number"),
-					rs.getDate("valid_from").toLocalDate(),
-					rs.getDate("expiration").toLocalDate()
-					);
-			return driverLicense;
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
+			return this.buildEntity(rs);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
 			try {
-				ps.close();
 				rs.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try { 
+					ps.close();
+				} catch (SQLException e) {
+					LOGGER.error(e);
+				} finally {
+					try {
+						cp.releaseConnection(c);
+					} catch (InterruptedException e) {
+						LOGGER.error(e);
+					}
+				}
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public DriverLicense buildEntity(ResultSet rs) throws SQLException {
+		DriverLicense driverLicense = new DriverLicense (
+				rs.getLong("id"),
+				rs.getLong("number"),
+				rs.getDate("valid_from").toLocalDate(),
+				rs.getDate("expiration").toLocalDate()
+				);
+		return driverLicense;
 	}
 
 

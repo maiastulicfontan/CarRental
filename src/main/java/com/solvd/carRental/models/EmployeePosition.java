@@ -1,5 +1,13 @@
 package com.solvd.carRental.models;
 
+import javax.xml.bind.annotation.XmlElement;  
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlAttribute;
+
+@XmlRootElement(name = "position")
+@XmlType (propOrder= {"id", "name", "description", "salary"})
 public class EmployeePosition {
 	private Long id;
 	private String name;
@@ -32,6 +40,7 @@ public class EmployeePosition {
 		this.department = department;
 	}
 
+	@XmlAttribute
 	public Long getId() {
 		return id;
 	}
@@ -40,6 +49,7 @@ public class EmployeePosition {
 		this.id = id;
 	}
 
+	@XmlElement
 	public String getName() {
 		return name;
 	}
@@ -47,7 +57,8 @@ public class EmployeePosition {
 	public void setName(String name) {
 		this.name = name;
 	}
-
+	
+	@XmlElement
 	public String getDescription() {
 		return description;
 	}
@@ -55,7 +66,8 @@ public class EmployeePosition {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
+	
+	@XmlElement
 	public Double getSalary() {
 		return salary;
 	}
@@ -63,7 +75,8 @@ public class EmployeePosition {
 	public void setSalary(Double salary) {
 		this.salary = salary;
 	}
-
+	
+	@XmlTransient
 	public Department getDepartment() {
 		return department;
 	}

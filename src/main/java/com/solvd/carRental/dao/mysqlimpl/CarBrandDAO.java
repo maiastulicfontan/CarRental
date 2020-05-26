@@ -28,32 +28,33 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement(GET_BY_ID);
 			ps.setLong(1, id);
 			rs = ps.executeQuery();
 			rs.next();
-			CarBrand carBrand = new CarBrand (
-					rs.getLong("id"),
-					rs.getString("name")
-					);
-			return carBrand;
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
+			return this.buildEntity(rs);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
 			try {
-				ps.close();
 				rs.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try { 
+					ps.close();
+				} catch (SQLException e) {
+					LOGGER.error(e);
+				} finally {
+					try {
+						cp.releaseConnection(c);
+					} catch (InterruptedException e) {
+						LOGGER.error(e);
+					}
+				}
 			}
 		}
 		return null;
@@ -66,34 +67,35 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement(GET_ALL);
 			rs = ps.executeQuery();
 			List <CarBrand> carBrands = new ArrayList<CarBrand>();
 			while (rs.next()) {
-				CarBrand carBrand = new CarBrand (
-						rs.getLong("id"),
-						rs.getString("name")
-						);
-				carBrands.add(carBrand);
+				carBrands.add(this.buildEntity(rs));
 			}
 			return carBrands;
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
 			try {
-				ps.close();
 				rs.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try { 
+					ps.close();
+				} catch (SQLException e) {
+					LOGGER.error(e);
+				} finally {
+					try {
+						cp.releaseConnection(c);
+					} catch (InterruptedException e) {
+						LOGGER.error(e);
+					}
+				}
 			}
 		}
 		return null;
@@ -105,26 +107,26 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 		Connection c = null;
 		PreparedStatement ps = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement(UPDATE);
 			ps.setString(1, carBrand.getName());
 			ps.setLong(2, carBrand.getId());
 			ps.executeUpdate();
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
-			try {
+			try { 
 				ps.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try {
+					cp.releaseConnection(c);
+				} catch (InterruptedException e) {
+					LOGGER.error(e);
+				}
 			}
 		}
 	}
@@ -136,7 +138,6 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 		PreparedStatement ps = null;
 		ResultSet generatedKeys = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, carBrand.getName());
@@ -147,21 +148,27 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 			} else {
 				throw new SQLException("Could not get id, fail in creating record");
 			}
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
 			try {
-				ps.close();
 				generatedKeys.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try { 
+					ps.close();
+				} catch (SQLException e) {
+					LOGGER.error(e);
+				} finally {
+					try {
+						cp.releaseConnection(c);
+					} catch (InterruptedException e) {
+						LOGGER.error(e);
+					}
+				}
 			}
 		}
 	}
@@ -172,27 +179,35 @@ public class CarBrandDAO implements IEntityDAO<CarBrand>{
 		Connection c = null;
 		PreparedStatement ps = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement(DELETE);
 			ps.setLong(1, id);
 			ps.executeUpdate();
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
-			try {
+			try { 
 				ps.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try {
+					cp.releaseConnection(c);
+				} catch (InterruptedException e) {
+					LOGGER.error(e);
+				}
 			}
 		}
 	}
 
+	@Override
+	public CarBrand buildEntity(ResultSet rs) throws SQLException {
+		CarBrand carBrand = new CarBrand (
+				rs.getLong("id"),
+				rs.getString("name")
+				);
+		return carBrand;
+	}
 }

@@ -39,40 +39,19 @@ public class CarModelParser {
 	        	Node node = nodeList.item(i);
 	        	if (node.getNodeType() == Node.ELEMENT_NODE) {
 	        		Element element = (Element) node;
-	        		CarModel tmpCarModel = new CarModel();
-	        		tmpCarModel.setId(Long.parseLong(element.getAttribute("id")));
-	        		tmpCarModel.setName(element.getElementsByTagName("name").item(0).getTextContent());
-	        		tmpCarModel.setDescription(element.getElementsByTagName("description").item(0).getTextContent());
-	        		tmpCarModel.setTransmission(element.getElementsByTagName("transmission").item(0).getTextContent());
-	        		tmpCarModel.setNumberOfSeats(Integer.parseInt(element.getElementsByTagName("number-of-seats").item(0).getTextContent()));
-	        		tmpCarModel.setAirbagInfo(element.getElementsByTagName("airbag-info").item(0).getTextContent());
-	        		tmpCarModel.setLuggageSpace(element.getElementsByTagName("luggage-space").item(0).getTextContent());
-	        		tmpCarModel.setFuelConsumption(element.getElementsByTagName("fuel-consumption").item(0).getTextContent());
-	        		tmpCarModel.setCostPerDay(Double.parseDouble(element.getElementsByTagName("number-of-seats").item(0).getTextContent()));
-	        		
-	        		CarBrand tmpCarBrand = new CarBrand();
+	        		CarModel tmpCarModel = this.getCarModelInfo(element);
 	        		NodeList carBrand = element.getElementsByTagName("carbrand");
 	        		Node nodeCarBrand = carBrand.item(0);
 	        		Element elementCarBrand = (Element) nodeCarBrand;
 	        		if (carBrand.getLength() > 0) {
-	        			tmpCarBrand.setId(Long.parseLong(elementCarBrand.getAttribute("id")));
-	        			tmpCarBrand.setName(elementCarBrand.getElementsByTagName("name").item(0).getTextContent());
-	        			tmpCarModel.setBrand(tmpCarBrand);
+	        			tmpCarModel.setBrand(this.getCarBrandInfo(elementCarBrand));
 	        		}
-	        		
-	        		CarType tmpCarType = new CarType();
 	        		NodeList carType = element.getElementsByTagName("car-type");
 	        		Node nodeCarType = carType.item(0);
 	        		Element elementCarType = (Element) nodeCarType;
 	        		if (carType.getLength() > 0) {
-	        			tmpCarType.setId(Long.parseLong(elementCarType.getAttribute("id")));
-	        			tmpCarType.setName(elementCarType.getElementsByTagName("name").item(0).getTextContent());
-	        			
-	        			tmpCarModel.setType(tmpCarType);
+	        			tmpCarModel.setType(this.getCarTypeInfo(elementCarType));
 	        		}
-	        		
-	        		
-	        		
 	        		carModels.add(tmpCarModel);		
 	        	}
 	        }
@@ -82,7 +61,35 @@ public class CarModelParser {
 		}
 		return carModels;
 	}
+	
+	public CarModel getCarModelInfo(Element element) {
+		CarModel tmpCarModel = new CarModel();
+		tmpCarModel.setId(Long.parseLong(element.getAttribute("id")));
+		tmpCarModel.setName(element.getElementsByTagName("name").item(0).getTextContent());
+		tmpCarModel.setDescription(element.getElementsByTagName("description").item(0).getTextContent());
+		tmpCarModel.setTransmission(element.getElementsByTagName("transmission").item(0).getTextContent());
+		tmpCarModel.setNumberOfSeats(Integer.parseInt(element.getElementsByTagName("number-of-seats").item(0).getTextContent()));
+		tmpCarModel.setAirbagInfo(element.getElementsByTagName("airbag-info").item(0).getTextContent());
+		tmpCarModel.setLuggageSpace(element.getElementsByTagName("luggage-space").item(0).getTextContent());
+		tmpCarModel.setFuelConsumption(element.getElementsByTagName("fuel-consumption").item(0).getTextContent());
+		tmpCarModel.setCostPerDay(Double.parseDouble(element.getElementsByTagName("cost-per-day").item(0).getTextContent()));
+		return tmpCarModel;
+	}
+	
+	public CarBrand getCarBrandInfo (Element elementCarBrand) {
+		CarBrand tmpCarBrand = new CarBrand();
+		tmpCarBrand.setId(Long.parseLong(elementCarBrand.getAttribute("id")));
+		tmpCarBrand.setName(elementCarBrand.getElementsByTagName("name").item(0).getTextContent());
+		return tmpCarBrand;
+	}
+	
+	public CarType getCarTypeInfo (Element elementCarType) {
+		CarType tmpCarType = new CarType();
+		tmpCarType.setId(Long.parseLong(elementCarType.getAttribute("id")));
+		tmpCarType.setName(elementCarType.getElementsByTagName("name").item(0).getTextContent());
+		return tmpCarType;
 		
+	}
 }
 
 

@@ -9,6 +9,9 @@ import org.apache.logging.log4j.Logger;
 import com.solvd.carRental.dao.mysqlimpl.CarBrandDAO;
 import com.solvd.carRental.dao.mysqlimpl.CreditCardDAO;
 import com.solvd.carRental.dao.mysqlimpl.CustomerDAO;
+import com.solvd.carRental.jaxb.CarJaxbParser;
+import com.solvd.carRental.jaxb.CarModelJaxbParser;
+import com.solvd.carRental.jaxb.EmployeeJaxbParser;
 import com.solvd.carRental.models.Car;
 import com.solvd.carRental.models.CarBrand;
 import com.solvd.carRental.models.CarModel;
@@ -23,6 +26,9 @@ public class CarRentalRunner {
 	private static Logger LOGGER = LogManager.getLogger(CarRentalRunner.class);
 	
 	public static void main(String[] args) {
+		EmployeeJaxbParser empJaxbParser = new EmployeeJaxbParser();
+		CarJaxbParser carJaxbParser = new CarJaxbParser();
+		CarModelJaxbParser carModelJaxbParser = new CarModelJaxbParser();
 		CustomerDAO custDao = new CustomerDAO();
 		CustomerService custService = new CustomerService();
 		CreditCardDAO cardDao = new CreditCardDAO();
@@ -60,8 +66,13 @@ public class CarRentalRunner {
 		
 		CarModelParser carModParser = new CarModelParser();
 		List<CarModel> carModels = carModParser.parseCarModels();
-		LOGGER.info(carModels.get(1).getBrand());
-		LOGGER.info(carModels.get(1).getType());
+		LOGGER.info(carModels);
+		
+		LOGGER.info(empJaxbParser.jaxbXmlToEmployee());
+		
+		LOGGER.info(carJaxbParser.jaxbXmlToCar());
+		
+		LOGGER.info(carModelJaxbParser.jaxbXmlToCarModel());
 	}
 
 }

@@ -1,5 +1,10 @@
 package com.solvd.carRental.models;
 
+import javax.xml.bind.annotation.XmlAttribute;  
+import javax.xml.bind.annotation.XmlElement;  
+import javax.xml.bind.annotation.XmlRootElement; 
+
+@XmlRootElement (name="car")
 public class Car {
 	private Long id;
 	private String licensePlate;
@@ -31,7 +36,7 @@ public class Car {
 		this.color = color;
 	}
 
-
+	@XmlAttribute
 	public Long getId() {
 		return id;
 	}
@@ -41,7 +46,7 @@ public class Car {
 		this.id = id;
 	}
 
-
+	@XmlElement (name="license-plate")
 	public String getLicensePlate() {
 		return licensePlate;
 	}
@@ -51,7 +56,7 @@ public class Car {
 		this.licensePlate = licensePlate;
 	}
 
-
+	@XmlElement (name="model-year")
 	public Integer getModelYear() {
 		return modelYear;
 	}
@@ -61,7 +66,7 @@ public class Car {
 		this.modelYear = modelYear;
 	}
 
-
+	@XmlElement (name="color")
 	public String getColor() {
 		return color;
 	}

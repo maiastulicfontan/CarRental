@@ -1,5 +1,10 @@
 package com.solvd.carRental.models;
 
+import javax.xml.bind.annotation.XmlAttribute;  
+import javax.xml.bind.annotation.XmlElement;  
+import javax.xml.bind.annotation.XmlRootElement;  
+
+@XmlRootElement (name = "car-model")
 public class CarModel {
 	private Long id;
 	private String name;
@@ -61,7 +66,7 @@ public class CarModel {
 		this.costPerDay = costPerDay;
 	}
 
-
+	@XmlAttribute
 	public Long getId() {
 		return id;
 	}
@@ -71,7 +76,7 @@ public class CarModel {
 		this.id = id;
 	}
 
-
+	@XmlElement
 	public String getName() {
 		return name;
 	}
@@ -81,7 +86,7 @@ public class CarModel {
 		this.name = name;
 	}
 
-
+	@XmlElement
 	public String getDescription() {
 		return description;
 	}
@@ -91,7 +96,7 @@ public class CarModel {
 		this.description = description;
 	}
 
-
+	@XmlElement
 	public String getTransmission() {
 		return transmission;
 	}
@@ -101,7 +106,7 @@ public class CarModel {
 		this.transmission = transmission;
 	}
 
-
+	@XmlElement (name = "number-of-seats")
 	public Integer getNumberOfSeats() {
 		return numberOfSeats;
 	}
@@ -111,7 +116,7 @@ public class CarModel {
 		this.numberOfSeats = numberOfSeats;
 	}
 
-
+	@XmlElement (name = "airbag-info")
 	public String getAirbagInfo() {
 		return airbagInfo;
 	}
@@ -121,7 +126,7 @@ public class CarModel {
 		this.airbagInfo = airbagInfo;
 	}
 
-
+	@XmlElement (name = "luggage-space")
 	public String getLuggageSpace() {
 		return luggageSpace;
 	}
@@ -131,7 +136,7 @@ public class CarModel {
 		this.luggageSpace = luggageSpace;
 	}
 
-
+	@XmlElement (name = "fuel-consumption")
 	public String getFuelConsumption() {
 		return fuelConsumption;
 	}
@@ -141,7 +146,7 @@ public class CarModel {
 		this.fuelConsumption = fuelConsumption;
 	}
 
-
+	@XmlElement (name = "carbrand")
 	public CarBrand getBrand() {
 		return brand;
 	}
@@ -151,7 +156,7 @@ public class CarModel {
 		this.brand = brand;
 	}
 
-
+	@XmlElement (name = "car-type")
 	public CarType getType() {
 		return type;
 	}
@@ -161,7 +166,7 @@ public class CarModel {
 		this.type = type;
 	}
 
-
+	@XmlElement (name = "cost-per-day")
 	public Double getCostPerDay() {
 		return costPerDay;
 	}
@@ -169,6 +174,13 @@ public class CarModel {
 
 	public void setCostPerDay(Double costPerDay) {
 		this.costPerDay = costPerDay;
+	}
+
+	@Override
+	public String toString() {
+		return "CarModel [id=" + id + ", name= " + name + ", brand = "+ this.getBrand().getName() +", description=" + description + ", transmission="
+				+ transmission + ", numberOfSeats=" + numberOfSeats + ", airbagInfo=" + airbagInfo + ", luggageSpace="
+				+ luggageSpace + ", fuelConsumption=" + fuelConsumption + ", type =" + this.getType().getName() + ", costPerDay=" + costPerDay + "]";
 	}
 	
 }

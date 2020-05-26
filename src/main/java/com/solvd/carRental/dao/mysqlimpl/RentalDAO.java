@@ -28,31 +28,33 @@ public class RentalDAO implements IEntityDAO<Rental> {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement(GET_BY_ID);
 			ps.setLong(1, id);
 			rs = ps.executeQuery();
 			rs.next();
-			Rental rental = new Rental (
-					rs.getLong("id")
-					);
-			return rental;
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
+			return this.buildEntity(rs);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
 			try {
-				ps.close();
 				rs.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try { 
+					ps.close();
+				} catch (SQLException e) {
+					LOGGER.error(e);
+				} finally {
+					try {
+						cp.releaseConnection(c);
+					} catch (InterruptedException e) {
+						LOGGER.error(e);
+					}
+				}
 			}
 		}
 		return null;
@@ -65,33 +67,35 @@ public class RentalDAO implements IEntityDAO<Rental> {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement(GET_ALL);
 			rs = ps.executeQuery();
 			List <Rental> rentals = new ArrayList<Rental>();
 			while (rs.next()) {
-				Rental rental = new Rental (
-						rs.getLong("id")
-						);
-				rentals.add(rental);
+				rentals.add(this.buildEntity(rs));
 			}
 			return rentals;
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
 			try {
-				ps.close();
 				rs.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try { 
+					ps.close();
+				} catch (SQLException e) {
+					LOGGER.error(e);
+				} finally {
+					try {
+						cp.releaseConnection(c);
+					} catch (InterruptedException e) {
+						LOGGER.error(e);
+					}
+				}
 			}
 		}
 		return null;
@@ -103,25 +107,25 @@ public class RentalDAO implements IEntityDAO<Rental> {
 		Connection c = null;
 		PreparedStatement ps = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement(UPDATE);
 			ps.setLong(1, rental.getId());
 			ps.executeUpdate();
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
-			try {
+			try { 
 				ps.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try {
+					cp.releaseConnection(c);
+				} catch (InterruptedException e) {
+					LOGGER.error(e);
+				}
 			}
 		}
 	}
@@ -132,25 +136,25 @@ public class RentalDAO implements IEntityDAO<Rental> {
 		Connection c = null;
 		PreparedStatement ps = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement(INSERT);
 			ps.setLong(1, rental.getId());
 			ps.executeUpdate();
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
-			try {
+			try { 
 				ps.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try {
+					cp.releaseConnection(c);
+				} catch (InterruptedException e) {
+					LOGGER.error(e);
+				}
 			}
 		}
 	}
@@ -161,27 +165,35 @@ public class RentalDAO implements IEntityDAO<Rental> {
 		Connection c = null;
 		PreparedStatement ps = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement(DELETE);
 			ps.setLong(1, id);
 			ps.executeUpdate();
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
-			try {
+			try { 
 				ps.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try {
+					cp.releaseConnection(c);
+				} catch (InterruptedException e) {
+					LOGGER.error(e);
+				}
 			}
 		}
+	}
+
+	@Override
+	public Rental buildEntity(ResultSet rs) throws SQLException {
+		Rental rental = new Rental (
+				rs.getLong("id")
+				);
+		return rental;
 	}
 
 }

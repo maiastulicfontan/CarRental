@@ -38,25 +38,12 @@ public class EmployeeParser {
 	        	Node node = nodeList.item(i);
 	        	if (node.getNodeType() == Node.ELEMENT_NODE) {
 	        		Element element = (Element) node;
-	        		Employee tmpEmp = new Employee();
-	        		tmpEmp.setId(Long.parseLong(element.getAttribute("id")));
-	        		tmpEmp.setFirstName(element.getElementsByTagName("first-name").item(0).getTextContent());
-	        		tmpEmp.setLastName(element.getElementsByTagName("last-name").item(0).getTextContent());
-	        		tmpEmp.setBirthDate(LocalDate.parse(element.getElementsByTagName("birth-date").item(0).getTextContent()));
-	        		tmpEmp.setNationalGovernmentId(element.getElementsByTagName("national-gvt-id").item(0).getTextContent());
-	        		tmpEmp.setHireDate(LocalDate.parse(element.getElementsByTagName("hire-date").item(0).getTextContent()));
-	        		
-	        		EmployeePosition tmpEmpPos = new EmployeePosition();
+	        		Employee tmpEmp =this.getEmployeeInfo(element);	        		
 	        		NodeList empPos = element.getElementsByTagName("position");
 	        		Node nodeEmpPos = empPos.item(0);
 	        		Element elementEmpPos = (Element) nodeEmpPos;
 	        		if (empPos.getLength() > 0) {
-	        			tmpEmpPos.setId(Long.parseLong(elementEmpPos.getAttribute("id")));
-	        			tmpEmpPos.setName(elementEmpPos.getElementsByTagName("name").item(0).getTextContent());
-	        			tmpEmpPos.setDescription(elementEmpPos.getElementsByTagName("description").item(0).getTextContent());
-	        			tmpEmpPos.setSalary(Double.parseDouble(elementEmpPos.getElementsByTagName("salary").item(0).getTextContent()));
-	        			
-	        			tmpEmp.setPosition(tmpEmpPos);
+	        			tmpEmp.setPosition(this.getEmpPositionInfo(elementEmpPos));
 	        		}
 	        		employees.add(tmpEmp);		
 	        	}
@@ -66,5 +53,25 @@ public class EmployeeParser {
 			 LOGGER.error(e);
 		}
 		return employees;
+	}
+	
+	public Employee getEmployeeInfo (Element element) {
+		Employee tmpEmp = new Employee();
+		tmpEmp.setId(Long.parseLong(element.getAttribute("id")));
+		tmpEmp.setFirstName(element.getElementsByTagName("first-name").item(0).getTextContent());
+		tmpEmp.setLastName(element.getElementsByTagName("last-name").item(0).getTextContent());
+		tmpEmp.setBirthDate(LocalDate.parse(element.getElementsByTagName("birth-date").item(0).getTextContent()));
+		tmpEmp.setNationalGovernmentId(element.getElementsByTagName("national-gvt-id").item(0).getTextContent());
+		tmpEmp.setHireDate(LocalDate.parse(element.getElementsByTagName("hire-date").item(0).getTextContent()));
+		return tmpEmp;
+	}
+	
+	public EmployeePosition getEmpPositionInfo (Element elementEmpPos) {
+		EmployeePosition tmpEmpPos = new EmployeePosition();
+		tmpEmpPos.setId(Long.parseLong(elementEmpPos.getAttribute("id")));
+		tmpEmpPos.setName(elementEmpPos.getElementsByTagName("name").item(0).getTextContent());
+		tmpEmpPos.setDescription(elementEmpPos.getElementsByTagName("description").item(0).getTextContent());
+		tmpEmpPos.setSalary(Double.parseDouble(elementEmpPos.getElementsByTagName("salary").item(0).getTextContent()));
+		return tmpEmpPos;
 	}
 }

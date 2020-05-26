@@ -28,33 +28,33 @@ public class ReservationStatusDAO implements IEntityDAO<ReservationStatus>{
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement(GET_BY_ID);
 			ps.setLong(1, id);
 			rs = ps.executeQuery();
 			rs.next();
-			ReservationStatus reservationStatus = new ReservationStatus (
-					rs.getLong("id"),
-					rs.getString("name"),
-					rs.getString("description")
-					);
-			return reservationStatus;
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
+			return this.buildEntity(rs);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
 			try {
-				ps.close();
 				rs.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try { 
+					ps.close();
+				} catch (SQLException e) {
+					LOGGER.error(e);
+				} finally {
+					try {
+						cp.releaseConnection(c);
+					} catch (InterruptedException e) {
+						LOGGER.error(e);
+					}
+				}
 			}
 		}
 		return null;
@@ -67,35 +67,35 @@ public class ReservationStatusDAO implements IEntityDAO<ReservationStatus>{
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement(GET_ALL);
 			rs = ps.executeQuery();
 			List <ReservationStatus> reservationStatusList = new ArrayList<ReservationStatus>(); //i'm aware i shouldn't name with suffix 'List', only done it 'cause status is the plural of status
 			while (rs.next()) {
-				ReservationStatus reservationStatus = new ReservationStatus (
-						rs.getLong("id"),
-						rs.getString("name"),
-						rs.getString("description")
-						);
-				reservationStatusList.add(reservationStatus);
+				reservationStatusList.add(this.buildEntity(rs));
 			}
 			return reservationStatusList;
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
 			try {
-				ps.close();
 				rs.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try { 
+					ps.close();
+				} catch (SQLException e) {
+					LOGGER.error(e);
+				} finally {
+					try {
+						cp.releaseConnection(c);
+					} catch (InterruptedException e) {
+						LOGGER.error(e);
+					}
+				}
 			}
 		}
 		return null;
@@ -107,27 +107,27 @@ public class ReservationStatusDAO implements IEntityDAO<ReservationStatus>{
 		Connection c = null;
 		PreparedStatement ps = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement(UPDATE);
 			ps.setString(1, reservationStatus.getName());
 			ps.setString(2, reservationStatus.getDescription());
 			ps.setLong(3, reservationStatus.getId());
 			ps.executeUpdate();
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
-			try {
+			try { 
 				ps.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try {
+					cp.releaseConnection(c);
+				} catch (InterruptedException e) {
+					LOGGER.error(e);
+				}
 			}
 		}
 	}
@@ -139,7 +139,6 @@ public class ReservationStatusDAO implements IEntityDAO<ReservationStatus>{
 		PreparedStatement ps = null;
 		ResultSet generatedKeys = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, reservationStatus.getName());
@@ -151,21 +150,27 @@ public class ReservationStatusDAO implements IEntityDAO<ReservationStatus>{
 			} else {
 				throw new SQLException("Could not get id, fail in creating record");
 			}
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
 			try {
-				ps.close();
 				generatedKeys.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try { 
+					ps.close();
+				} catch (SQLException e) {
+					LOGGER.error(e);
+				} finally {
+					try {
+						cp.releaseConnection(c);
+					} catch (InterruptedException e) {
+						LOGGER.error(e);
+					}
+				}
 			}
 		}
 	}
@@ -176,27 +181,37 @@ public class ReservationStatusDAO implements IEntityDAO<ReservationStatus>{
 		Connection c = null;
 		PreparedStatement ps = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement(DELETE);
 			ps.setLong(1, id);
 			ps.executeUpdate();
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
-			try {
+			try { 
 				ps.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try {
+					cp.releaseConnection(c);
+				} catch (InterruptedException e) {
+					LOGGER.error(e);
+				}
 			}
 		}
+	}
+
+	@Override
+	public ReservationStatus buildEntity(ResultSet rs) throws SQLException {
+		ReservationStatus reservationStatus = new ReservationStatus (
+				rs.getLong("id"),
+				rs.getString("name"),
+				rs.getString("description")
+				);
+		return reservationStatus;
 	}
 
 

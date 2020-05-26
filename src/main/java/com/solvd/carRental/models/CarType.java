@@ -1,5 +1,10 @@
 package com.solvd.carRental.models;
 
+import javax.xml.bind.annotation.XmlElement;  
+import javax.xml.bind.annotation.XmlAttribute; 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement (name = "car-type")
 public class CarType {
 	private Long id;
 	private String name;
@@ -18,7 +23,8 @@ public class CarType {
 		this.name = name;
 		this.description = description;
 	}
-
+	
+	@XmlAttribute
 	public Long getId() {
 		return id;
 	}
@@ -26,7 +32,8 @@ public class CarType {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
+	
+	@XmlElement
 	public String getName() {
 		return name;
 	}
@@ -34,7 +41,8 @@ public class CarType {
 	public void setName(String name) {
 		this.name = name;
 	}
-
+	
+	@XmlElement
 	public String getDescription() {
 		return description;
 	}

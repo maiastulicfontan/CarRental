@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -22,32 +23,33 @@ private final static Logger LOGGER = LogManager.getLogger(LocationDAO.class);
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement("select * from Car_Rental_Company where id = ?");
 			ps.setLong(1, id);
 			rs = ps.executeQuery();
 			rs.next();
-			CarRentalCompany carRentalCompany = new CarRentalCompany (
-					rs.getLong("id"),
-					rs.getString("name")
-					);
-			return carRentalCompany;
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
+			return this.buildEntity(rs);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
 			try {
-				ps.close();
 				rs.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try { 
+					ps.close();
+				} catch (SQLException e) {
+					LOGGER.error(e);
+				} finally {
+					try {
+						cp.releaseConnection(c);
+					} catch (InterruptedException e) {
+						LOGGER.error(e);
+					}
+				}
 			}
 		}
 		return null;
@@ -60,34 +62,35 @@ private final static Logger LOGGER = LogManager.getLogger(LocationDAO.class);
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement("select * from Car_Rental_Company");
 			rs = ps.executeQuery();
 			List <CarRentalCompany> carRentalCompanies = new ArrayList<CarRentalCompany>();
 			while (rs.next()) {
-				CarRentalCompany carRentalCompany = new CarRentalCompany (
-						rs.getLong("id"),
-						rs.getString("name")
-						);
-				carRentalCompanies.add(carRentalCompany);
+				carRentalCompanies.add(this.buildEntity(rs));
 			}
 			return carRentalCompanies;
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
 			try {
-				ps.close();
 				rs.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try { 
+					ps.close();
+				} catch (SQLException e) {
+					LOGGER.error(e);
+				} finally {
+					try {
+						cp.releaseConnection(c);
+					} catch (InterruptedException e) {
+						LOGGER.error(e);
+					}
+				}
 			}
 		}
 		return null;
@@ -99,26 +102,26 @@ private final static Logger LOGGER = LogManager.getLogger(LocationDAO.class);
 		Connection c = null;
 		PreparedStatement ps = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement("update Car_Rental_Company set name = ? where id = ?");
+			ps = c.prepareStatement("update Car_Rental_Companies set name = ? where id = ?");
 			ps.setString(1, carRentalCompany.getName());
 			ps.setLong(2, carRentalCompany.getId()); 
 			ps.executeUpdate();
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
-			try {
+			try { 
 				ps.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try {
+					cp.releaseConnection(c);
+				} catch (InterruptedException e) {
+					LOGGER.error(e);
+				}
 			}
 		}
 	}
@@ -127,28 +130,40 @@ private final static Logger LOGGER = LogManager.getLogger(LocationDAO.class);
 	public void saveEntity(CarRentalCompany carRentalCompany) {
 		ConnectionPool cp = ConnectionPool.getInstance();
 		Connection c = null;
+		ResultSet generatedKeys = null;
 		PreparedStatement ps = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement("insert into Locations (id, name) values(?, ?)");
-			ps.setLong(1, carRentalCompany.getId());
-			ps.setString(2, carRentalCompany.getName());
+			ps = c.prepareStatement("insert into Car_Rental_Companies (name) values(?)", Statement.RETURN_GENERATED_KEYS);
+			ps.setString(1, carRentalCompany.getName());
 			ps.executeUpdate();
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
+			generatedKeys = ps.getGeneratedKeys();
+			if (generatedKeys.next()) {
+				carRentalCompany.setId(generatedKeys.getLong(1));
+			} else {
+				throw new SQLException("Could not get id, fail in creating record");
+			}
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
 			try {
-				ps.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
+				generatedKeys.close();
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try { 
+					ps.close();
+				} catch (SQLException e) {
+					LOGGER.error(e);
+				} finally {
+					try {
+						cp.releaseConnection(c);
+					} catch (InterruptedException e) {
+						LOGGER.error(e);
+					}
+				}
 			}
 		}
 	}
@@ -159,27 +174,36 @@ private final static Logger LOGGER = LogManager.getLogger(LocationDAO.class);
 		Connection c = null;
 		PreparedStatement ps = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
-			ps = c.prepareStatement("delete from Locations where id = ?");
+			ps = c.prepareStatement("delete from Car_Rental_Companies where id = ?");
 			ps.setLong(1, id);
 			ps.executeUpdate();
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
-			try {
+			try { 
 				ps.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try {
+					cp.releaseConnection(c);
+				} catch (InterruptedException e) {
+					LOGGER.error(e);
+				}
 			}
 		}
+	}
+
+	@Override
+	public CarRentalCompany buildEntity(ResultSet rs) throws SQLException {
+		CarRentalCompany carRentalCompany = new CarRentalCompany (
+				rs.getLong("id"),
+				rs.getString("name")
+				);
+		return carRentalCompany;
 	}
 	
 

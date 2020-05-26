@@ -4,6 +4,11 @@ package com.solvd.carRental.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.solvd.carRental.dao.IAddressDAO;
+import com.solvd.carRental.dao.ICreditCardDAO;
+import com.solvd.carRental.dao.IDriverLicenseDAO;
+import com.solvd.carRental.dao.IEntityDAO;
+import com.solvd.carRental.dao.IPhoneNumberDAO;
 import com.solvd.carRental.dao.mysqlimpl.AddressDAO;
 import com.solvd.carRental.dao.mysqlimpl.CreditCardDAO;
 import com.solvd.carRental.dao.mysqlimpl.CustomerDAO;
@@ -12,11 +17,11 @@ import com.solvd.carRental.dao.mysqlimpl.PhoneNumberDAO;
 import com.solvd.carRental.models.Customer;
 
 public class CustomerService {
-	private CustomerDAO customerDao;
-	private CreditCardDAO creditCardDao;
-	private AddressDAO addressDao;
-	private PhoneNumberDAO phoneNumberDao;
-	private DriverLicenseDAO driverLicenseDao;
+	private IEntityDAO<Customer> customerDao;
+	private ICreditCardDAO creditCardDao;
+	private IAddressDAO addressDao;
+	private IPhoneNumberDAO phoneNumberDao;
+	private IDriverLicenseDAO driverLicenseDao;
 
 	
 	public CustomerService() {
@@ -29,18 +34,18 @@ public class CustomerService {
 	
 	public Customer getCustomerById (Long id) {
 		Customer customer = customerDao.getEntityById(id);
-		this.update(customer);
+		this.buildCustomer(customer);
 		return customer;
 	}
 	
 	public List<Customer> getAllCustomers() {
 		List<Customer> customers = new ArrayList<Customer>();
 		customers = customerDao.getAll();
-		customers.forEach (tmpCust -> this.update(tmpCust));
+		customers.forEach (tmpCust -> this.buildCustomer(tmpCust));
 		return customers;
 	}
 	
-	public void update (Customer customer) {
+	public void buildCustomer (Customer customer) {
 		customer.setCreditCards(creditCardDao.getAllByCustomerId(customer.getId()));
 		customer.setAddresses(addressDao.getAllByBusinessEntityId(customer.getId()));
 		customer.setPhoneNumbers(phoneNumberDao.getAllByBusinessEntityId(customer.getId()));

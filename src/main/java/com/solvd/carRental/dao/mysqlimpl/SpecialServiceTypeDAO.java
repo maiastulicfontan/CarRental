@@ -29,34 +29,33 @@ public class SpecialServiceTypeDAO implements IEntityDAO<SpecialServiceType> {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement(GET_BY_ID);
 			ps.setLong(1, id);
 			rs = ps.executeQuery();
 			rs.next();
-			SpecialServiceType specialServiceType = new SpecialServiceType (
-					rs.getLong("id"),
-					rs.getString("name"),
-					rs.getString("description"),
-					rs.getDouble("cost")
-					);
-			return specialServiceType;
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
+			return this.buildEntity(rs);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
 			try {
-				ps.close();
 				rs.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try { 
+					ps.close();
+				} catch (SQLException e) {
+					LOGGER.error(e);
+				} finally {
+					try {
+						cp.releaseConnection(c);
+					} catch (InterruptedException e) {
+						LOGGER.error(e);
+					}
+				}
 			}
 		}
 		return null;
@@ -69,36 +68,35 @@ public class SpecialServiceTypeDAO implements IEntityDAO<SpecialServiceType> {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement(GET_ALL);
 			rs = ps.executeQuery();
 			List <SpecialServiceType> specialServiceTypes = new ArrayList<SpecialServiceType>();
 			while (rs.next()) {
-				SpecialServiceType specialServiceType = new SpecialServiceType (
-					rs.getLong("id"),
-					rs.getString("name"),
-					rs.getString("description"),
-					rs.getDouble("cost")
-				);
-				specialServiceTypes.add(specialServiceType);
+				specialServiceTypes.add(this.buildEntity(rs));
 			}
 			return specialServiceTypes;
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
 			try {
-				ps.close();
 				rs.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try { 
+					ps.close();
+				} catch (SQLException e) {
+					LOGGER.error(e);
+				} finally {
+					try {
+						cp.releaseConnection(c);
+					} catch (InterruptedException e) {
+						LOGGER.error(e);
+					}
+				}
 			}
 		}
 		return null;
@@ -110,7 +108,6 @@ public class SpecialServiceTypeDAO implements IEntityDAO<SpecialServiceType> {
 		Connection c = null;
 		PreparedStatement ps = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement(UPDATE);
 			ps.setString(1, specialServiceType.getName());
@@ -118,20 +115,21 @@ public class SpecialServiceTypeDAO implements IEntityDAO<SpecialServiceType> {
 			ps.setDouble(3, specialServiceType.getCost());
 			ps.setLong(4, specialServiceType.getId()); 
 			ps.executeUpdate();
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
-			try {
+			try { 
 				ps.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try {
+					cp.releaseConnection(c);
+				} catch (InterruptedException e) {
+					LOGGER.error(e);
+				}
 			}
 		}
 	}
@@ -143,7 +141,6 @@ public class SpecialServiceTypeDAO implements IEntityDAO<SpecialServiceType> {
 		PreparedStatement ps = null;
 		ResultSet generatedKeys = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, specialServiceType.getName());
@@ -156,21 +153,27 @@ public class SpecialServiceTypeDAO implements IEntityDAO<SpecialServiceType> {
 			} else {
 				throw new SQLException("Could not get id, fail in creating record");
 			}
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
 			try {
-				ps.close();
 				generatedKeys.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try { 
+					ps.close();
+				} catch (SQLException e) {
+					LOGGER.error(e);
+				} finally {
+					try {
+						cp.releaseConnection(c);
+					} catch (InterruptedException e) {
+						LOGGER.error(e);
+					}
+				}
 			}
 		}
 	}
@@ -181,27 +184,38 @@ public class SpecialServiceTypeDAO implements IEntityDAO<SpecialServiceType> {
 		Connection c = null;
 		PreparedStatement ps = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement(DELETE);
 			ps.setLong(1, id);
 			ps.executeUpdate();
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
-			try {
+			try { 
 				ps.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try {
+					cp.releaseConnection(c);
+				} catch (InterruptedException e) {
+					LOGGER.error(e);
+				}
 			}
 		}
+	}
+
+	@Override
+	public SpecialServiceType buildEntity(ResultSet rs) throws SQLException {
+		SpecialServiceType specialServiceType = new SpecialServiceType (
+				rs.getLong("id"),
+				rs.getString("name"),
+				rs.getString("description"),
+				rs.getDouble("cost")
+				);
+		return specialServiceType;
 	}
 
 

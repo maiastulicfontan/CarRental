@@ -26,11 +26,10 @@ public class ConnectionPool {
 	
 	public void init() {
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			connectionPoolQueue.put(DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/car_rental?serverTimezone=UTC", "root", "root"));
 			LOGGER.info("Connection" + connectionPoolQueue.peek()+ "  has been initialized");
 			currentConnections.getAndIncrement();
-		} catch (InterruptedException | SQLException | ClassNotFoundException e) {
+		} catch (InterruptedException | SQLException e) {
 			LOGGER.error(e);
 		}
 	}

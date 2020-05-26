@@ -38,12 +38,7 @@ public class CarParser {
 	        	Node node = nodeList.item(i);
 	        	if (node.getNodeType()== Node.ELEMENT_NODE) {
 	        		Element element = (Element) node;
-	        		Car tmpCar = new Car();
-	        		tmpCar.setId(Long.parseLong(element.getAttribute("id")));
-	        		tmpCar.setLicensePlate(element.getElementsByTagName("license-plate").item(0).getTextContent());
-	        		tmpCar.setModelYear(Integer.parseInt(element.getElementsByTagName("model-year").item(0).getTextContent()));
-	        		tmpCar.setColor(element.getElementsByTagName("color").item(0).getTextContent());
-	        		//car model?
+	        		Car tmpCar = this.getCarInfo(element);
 	        		cars.add(tmpCar);
 	        	}
 	        }
@@ -51,5 +46,14 @@ public class CarParser {
 			LOGGER.error(e);
 		}
 		return cars;
+	}
+	
+	public Car getCarInfo (Element element) {
+		Car tmpCar = new Car();
+		tmpCar.setId(Long.parseLong(element.getAttribute("id")));
+		tmpCar.setLicensePlate(element.getElementsByTagName("license-plate").item(0).getTextContent());
+		tmpCar.setModelYear(Integer.parseInt(element.getElementsByTagName("model-year").item(0).getTextContent()));
+		tmpCar.setColor(element.getElementsByTagName("color").item(0).getTextContent());
+		return tmpCar;
 	}
 }

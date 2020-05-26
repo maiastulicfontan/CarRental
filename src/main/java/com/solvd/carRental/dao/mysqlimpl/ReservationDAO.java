@@ -30,40 +30,33 @@ public class ReservationDAO implements IEntityDAO<Reservation> {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement(GET_BY_ID);
 			ps.setLong(1, id);
 			rs = ps.executeQuery();
 			rs.next();
-			Timestamp pickupTs = rs.getTimestamp ("pickup_date_time");
-			LocalDateTime pickupDateTime = pickupTs.toLocalDateTime();
-			Timestamp returnTs = rs.getTimestamp ("return_date_time");
-			LocalDateTime returnDateTime = returnTs.toLocalDateTime();
-			Reservation reservation = new Reservation (
-					rs.getLong("id"),
-					pickupDateTime,
-					returnDateTime,
-					rs.getDouble("cost"),
-					rs.getLong("confirmation_number"),
-					rs.getDate("creation_date").toLocalDate()
-					);
-			return reservation;
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
+			return this.buildEntity(rs);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
 			try {
-				ps.close();
 				rs.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try { 
+					ps.close();
+				} catch (SQLException e) {
+					LOGGER.error(e);
+				} finally {
+					try {
+						cp.releaseConnection(c);
+					} catch (InterruptedException e) {
+						LOGGER.error(e);
+					}
+				}
 			}
 		}
 		return null;
@@ -76,42 +69,35 @@ public class ReservationDAO implements IEntityDAO<Reservation> {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement(GET_ALL);
 			rs = ps.executeQuery();
 			List <Reservation> reservations = new ArrayList<Reservation>();
 			while (rs.next()) {
-				Timestamp pickupTs = rs.getTimestamp ("pickup_date_time");
-				LocalDateTime pickupDateTime = pickupTs.toLocalDateTime();
-				Timestamp returnTs = rs.getTimestamp ("return_date_time");
-				LocalDateTime returnDateTime = returnTs.toLocalDateTime();
-				Reservation reservation = new Reservation (
-						rs.getLong("id"),
-						pickupDateTime,
-						returnDateTime,
-						rs.getDouble("cost"),
-						rs.getLong("confirmation_number"),
-						rs.getDate("creation_date").toLocalDate()
-						);
-				reservations.add(reservation);
+				reservations.add(this.buildEntity(rs));
 			}
 			return reservations;
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
 			try {
-				ps.close();
 				rs.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try { 
+					ps.close();
+				} catch (SQLException e) {
+					LOGGER.error(e);
+				} finally {
+					try {
+						cp.releaseConnection(c);
+					} catch (InterruptedException e) {
+						LOGGER.error(e);
+					}
+				}
 			}
 		}
 		return null;
@@ -123,7 +109,6 @@ public class ReservationDAO implements IEntityDAO<Reservation> {
 		Connection c = null;
 		PreparedStatement ps = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement(UPDATE);
 			Timestamp pickupTs = Timestamp.valueOf(reservation.getPickupDateTime());
@@ -134,20 +119,21 @@ public class ReservationDAO implements IEntityDAO<Reservation> {
 			ps.setLong (4, reservation.getConfirmationNumber());
 			ps.setLong(5, reservation.getId());
 			ps.executeUpdate();
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
-			try {
+			try { 
 				ps.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try {
+					cp.releaseConnection(c);
+				} catch (InterruptedException e) {
+					LOGGER.error(e);
+				}
 			}
 		}
 	}
@@ -159,7 +145,6 @@ public class ReservationDAO implements IEntityDAO<Reservation> {
 		PreparedStatement ps = null;
 		ResultSet generatedKeys = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
 			Timestamp pickupTs = Timestamp.valueOf(reservation.getPickupDateTime());
@@ -175,21 +160,27 @@ public class ReservationDAO implements IEntityDAO<Reservation> {
 			} else {
 				throw new SQLException("Could not get id, fail in creating record");
 			}
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
 			try {
-				ps.close();
 				generatedKeys.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try { 
+					ps.close();
+				} catch (SQLException e) {
+					LOGGER.error(e);
+				} finally {
+					try {
+						cp.releaseConnection(c);
+					} catch (InterruptedException e) {
+						LOGGER.error(e);
+					}
+				}
 			}
 		}
 	}
@@ -200,27 +191,44 @@ public class ReservationDAO implements IEntityDAO<Reservation> {
 		Connection c = null;
 		PreparedStatement ps = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
 			c = cp.getConnection();
 			ps = c.prepareStatement(DELETE);
 			ps.setLong(1, id);
 			ps.executeUpdate();
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 		} finally {
-			try {
+			try { 
 				ps.close();
-				cp.releaseConnection(c);
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
 			} catch (SQLException e) {
 				LOGGER.error(e);
+			} finally {
+				try {
+					cp.releaseConnection(c);
+				} catch (InterruptedException e) {
+					LOGGER.error(e);
+				}
 			}
 		}
+	}
+
+	@Override
+	public Reservation buildEntity(ResultSet rs) throws SQLException {
+		Timestamp pickupTs = rs.getTimestamp ("pickup_date_time");
+		LocalDateTime pickupDateTime = pickupTs.toLocalDateTime();
+		Timestamp returnTs = rs.getTimestamp ("return_date_time");
+		LocalDateTime returnDateTime = returnTs.toLocalDateTime();
+		Reservation reservation = new Reservation (
+				rs.getLong("id"),
+				pickupDateTime,
+				returnDateTime,
+				rs.getDouble("cost"),
+				rs.getLong("confirmation_number"),
+				rs.getDate("creation_date").toLocalDate()
+				);
+		return reservation;
 	}
 	
 

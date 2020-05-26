@@ -1,8 +1,13 @@
 package com.solvd.carRental.models;
 
-import java.time.LocalDate;
+import java.time.LocalDate; 
+import javax.xml.bind.annotation.XmlElement;  
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import com.solvd.carRental.jaxb.adapters.LocalDateAdapter;  
 
+@XmlRootElement (name = "employee")
 public class Employee extends Person {
 	private LocalDate hireDate;
 	private EmployeePosition position;
@@ -28,7 +33,9 @@ public class Employee extends Person {
 		super(id);
 		this.hireDate = hireDate;
 	}
-
+	
+	@XmlJavaTypeAdapter(LocalDateAdapter.class)
+	@XmlElement (name = "hire-date")
 	public LocalDate getHireDate() {
 		return hireDate;
 	}
@@ -36,7 +43,8 @@ public class Employee extends Person {
 	public void setHireDate(LocalDate hireDate) {
 		this.hireDate = hireDate;
 	}
-
+	
+	@XmlElement
 	public EmployeePosition getPosition() {
 		return position;
 	}
@@ -49,7 +57,7 @@ public class Employee extends Person {
 	public String toString() {
 		return "Employee [id: " + getId() + ", First Name: " + getFirstName() + ", Last Name: "
 				+ getLastName() + ", Birth Date: " + getBirthDate() + ", National Government Id: "
-				+ getNationalGovernmentId() + ", Hire Date: " + hireDate + "]";
+				+ getNationalGovernmentId() + ", Hire Date: " + hireDate + ", Phone Numbers: "+ this.getPhoneNumbers()+ "]";
 	
 	}
 

@@ -3,7 +3,8 @@ package com.solvd.carRental.models;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Location extends BusinessEntity{
+public class Location{
+	private Long id;
 	private String name;
 	private String hoursOfOperation;
 	private String additionalInformation;
@@ -13,7 +14,7 @@ public class Location extends BusinessEntity{
 	public Location () {}
 	
 	public Location(Long id, String name, String hoursOfOperation, String additionalInformation) {
-		super(id);
+		this.id = id;
 		this.name = name;
 		this.hoursOfOperation = hoursOfOperation;
 		this.additionalInformation = additionalInformation;
@@ -26,6 +27,14 @@ public class Location extends BusinessEntity{
 		this.additionalInformation = additionalInformation;
 	}
 
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public String getName() {
 		return name;

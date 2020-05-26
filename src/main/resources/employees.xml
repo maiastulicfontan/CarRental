@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<employees>
+<?xml version="1.0" encoding="UTF-8" ?> 
     <employee id="5">
         <first-name>John</first-name>
         <last-name>Smith</last-name>
@@ -11,26 +10,13 @@
             <description>Supervises all sales related processes</description>
             <salary>45000</salary>
         </position>
+        <phone-numbers>
+        	<phone-number id="1">
+        		<number>+54871556542</number>
+        	</phone-number>
+        	<phone-number id="2">
+        	    <number>+11548763201</number>
+        	</phone-number>
+        </phone-numbers>
     </employee>
-    <employee id="6">
-        <first-name>Chris</first-name>
-        <last-name>Cornell</last-name>
-        <birth-date>1982-11-03</birth-date>
-        <national-gvt-id>544544546</national-gvt-id>
-        <hire-date>2019-02-25</hire-date>
-    </employee>
-    <employee id="7">
-        <first-name>Mariah</first-name>
-        <last-name>Carey</last-name>
-        <birth-date>1992-10-07</birth-date>
-        <national-gvt-id>564987132</national-gvt-id>
-        <hire-date>2020-01-26</hire-date>
-    </employee>
-    <employee id="8">
-        <first-name>Helen</first-name>
-        <last-name>Mirren</last-name>
-        <birth-date>1965-12-20</birth-date>
-        <national-gvt-id>1354687521</national-gvt-id>
-        <hire-date>2010-05-10</hire-date>
-    </employee>
-</employees>
+     
