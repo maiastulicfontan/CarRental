@@ -1,4 +1,4 @@
-package com.solvd.carRental.xmldomparser;
+package com.solvd.carRental.parsers.xmldomparser;
 
 import com.solvd.carRental.models.Employee;
 import com.solvd.carRental.models.EmployeePosition;

@@ -1,4 +1,4 @@
-package com.solvd.carRental.jaxb;
+package com.solvd.carRental.parsers.jaxb;
 
 import java.io.File;
 
@@ -27,9 +27,8 @@ public class CarJaxbParser {
 	}
 	
 	public void jaxbCarToXml (Car car) {
-		JAXBContext jaxbContext;
 		try {
-			jaxbContext = JAXBContext.newInstance(Car.class);
+			JAXBContext jaxbContext = JAXBContext.newInstance(Car.class);
 			Marshaller marshaller = jaxbContext.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE); //output format with linefeeds and indentation
 			marshaller.marshal(car, new File(""));

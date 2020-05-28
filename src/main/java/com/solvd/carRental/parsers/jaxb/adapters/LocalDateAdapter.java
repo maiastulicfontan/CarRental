@@ -1,4 +1,4 @@
-package com.solvd.carRental.jaxb.adapters;
+package com.solvd.carRental.parsers.jaxb.adapters;
 
 
 import java.time.LocalDate;

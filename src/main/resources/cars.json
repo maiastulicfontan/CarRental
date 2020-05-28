@@ -1,0 +1,32 @@
+[
+  {
+    "id": "1",
+    "license-plate": "ABC1234",
+    "model-year": "2018",
+    "color": "Emerald Green"
+  },
+  {
+    "id": "2",
+    "license-plate": "BC113AD",
+    "model-year": "2019",
+    "color": "Pearl White"
+  },
+  {
+    "id": "3",
+    "license-plate": "ILUVNY95",
+    "model-year": "2014",
+    "color": "Ruby Red"
+  },
+  {
+    "id": "4",
+    "license-plate": "XYZ789",
+    "model-year": "2015",
+    "color": "Sapphire Blue"
+  },
+  {
+    "id": "5",
+    "license-plate": "FFF000",
+    "model-year": "2020",
+    "color": "Amethyst Violet"
+  }
+]

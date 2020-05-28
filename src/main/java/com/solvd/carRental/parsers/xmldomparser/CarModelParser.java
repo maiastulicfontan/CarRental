@@ -1,4 +1,4 @@
-package com.solvd.carRental.xmldomparser;
+package com.solvd.carRental.parsers.xmldomparser;
 
 import java.io.File;
 import java.io.IOException;

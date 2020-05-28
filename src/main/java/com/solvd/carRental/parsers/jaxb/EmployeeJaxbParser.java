@@ -1,4 +1,4 @@
-package com.solvd.carRental.jaxb;
+package com.solvd.carRental.parsers.jaxb;
 
 import java.io.File;
 
@@ -10,29 +10,29 @@ import javax.xml.bind.Unmarshaller;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.solvd.carRental.models.CarModel;
+import com.solvd.carRental.models.Employee;
 
-public class CarModelJaxbParser {
-	private final static Logger LOGGER = LogManager.getLogger(CarModelJaxbParser.class);
+public class EmployeeJaxbParser {
+	private final static Logger LOGGER = LogManager.getLogger(EmployeeJaxbParser.class);
 	
-	public CarModel jaxbXmlToCarModel () {
+	public Employee jaxbXmlToEmployee () {
 		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance(CarModel.class);
+			JAXBContext jaxbContext = JAXBContext.newInstance(Employee.class);
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-			return (CarModel) unmarshaller.unmarshal(new File("src/main/resources/car-models.xml"));
+			return (Employee) unmarshaller.unmarshal(new File("src/main/resources/employees.xml"));
 		} catch (JAXBException e) {
 			LOGGER.error(e);
 		}
 		return null;
 	}
 	
-	public void jaxbCarModelToXml (CarModel carModel) {
+	public void jaxbEmployeeToXml (Employee employee) {
 		JAXBContext jaxbContext;
 		try {
-			jaxbContext = JAXBContext.newInstance(CarModel.class);
+			jaxbContext = JAXBContext.newInstance(Employee.class);
 			Marshaller marshaller = jaxbContext.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-			marshaller.marshal(carModel, new File(""));
+			marshaller.marshal(employee, new File(""));
 		} catch (JAXBException e) {
 			LOGGER.error(e);
 		}

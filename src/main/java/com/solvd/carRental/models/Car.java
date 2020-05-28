@@ -2,7 +2,9 @@ package com.solvd.carRental.models;
 
 import javax.xml.bind.annotation.XmlAttribute;  
 import javax.xml.bind.annotation.XmlElement;  
-import javax.xml.bind.annotation.XmlRootElement; 
+import javax.xml.bind.annotation.XmlRootElement;
+
+import com.fasterxml.jackson.annotation.JsonSetter; 
 
 @XmlRootElement (name="car")
 public class Car {
@@ -41,7 +43,7 @@ public class Car {
 		return id;
 	}
 
-
+	@JsonSetter("id")
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -51,7 +53,7 @@ public class Car {
 		return licensePlate;
 	}
 
-
+	@JsonSetter("license-plate")
 	public void setLicensePlate(String licensePlate) {
 		this.licensePlate = licensePlate;
 	}
@@ -61,7 +63,7 @@ public class Car {
 		return modelYear;
 	}
 
-
+	@JsonSetter("model-year")
 	public void setModelYear(Integer modelYear) {
 		this.modelYear = modelYear;
 	}

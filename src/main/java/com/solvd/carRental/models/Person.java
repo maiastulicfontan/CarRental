@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import com.solvd.carRental.jaxb.adapters.LocalDateAdapter; 
+import com.solvd.carRental.parsers.jaxb.adapters.LocalDateAdapter; 
 
 public abstract class Person {
 	private Long id;

@@ -1,28 +1,28 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <cars>
     <car id="1">
+        <color>Emerald Green</color>
         <license-plate>ABC1234</license-plate>
         <model-year>2018</model-year>
-        <color>Emerald Green</color>
     </car>
     <car id="2">
+        <color>Pearl White</color>
         <license-plate>BC113AD</license-plate>
         <model-year>2019</model-year>
-        <color>Pearl White</color>
     </car>
     <car id="3">
+        <color>Ruby Red</color>
         <license-plate>ILUVNY95</license-plate>
         <model-year>2014</model-year>
-        <color>Ruby Red</color>
     </car>
     <car id="4">
+        <color>Sapphire Blue</color>
         <license-plate>XYZ789</license-plate>
         <model-year>2015</model-year>
-        <color>Sapphire Blue</color>
     </car>
     <car id="5">
+        <color>Amethyst Violet</color>
         <license-plate>FFF000</license-plate>
         <model-year>2020</model-year>
-        <color>Amethyst Violet</color>
     </car>
 </cars>
