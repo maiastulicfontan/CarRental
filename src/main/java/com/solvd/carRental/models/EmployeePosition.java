@@ -4,6 +4,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+
+import com.fasterxml.jackson.annotation.JsonSetter;
+
 import javax.xml.bind.annotation.XmlAttribute;
 
 @XmlRootElement(name = "position")
@@ -45,6 +48,7 @@ public class EmployeePosition {
 		return id;
 	}
 
+	@JsonSetter("id")
 	public void setId(Long id) {
 		this.id = id;
 	}

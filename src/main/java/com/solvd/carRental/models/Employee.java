@@ -5,6 +5,11 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.solvd.carRental.parsers.jaxb.adapters.LocalDateAdapter;  
 
 @XmlRootElement (name = "employee")
@@ -39,7 +44,10 @@ public class Employee extends Person {
 	public LocalDate getHireDate() {
 		return hireDate;
 	}
-
+	
+	@JsonDeserialize(using= LocalDateDeserializer.class)
+	@JsonSerialize(using= LocalDateSerializer.class)
+	@JsonSetter("hire-date")
 	public void setHireDate(LocalDate hireDate) {
 		this.hireDate = hireDate;
 	}
@@ -48,7 +56,8 @@ public class Employee extends Person {
 	public EmployeePosition getPosition() {
 		return position;
 	}
-
+	
+	@JsonSetter("position")
 	public void setPosition(EmployeePosition position) {
 		this.position = position;
 	}

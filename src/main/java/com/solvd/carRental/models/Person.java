@@ -8,7 +8,13 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.solvd.carRental.parsers.jaxb.adapters.LocalDateAdapter; 
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
 public abstract class Person {
 	private Long id;
@@ -44,7 +50,7 @@ public abstract class Person {
 		return id;
 	}
 
-
+	@JsonSetter("id")
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -55,7 +61,7 @@ public abstract class Person {
 		return firstName;
 	}
 
-
+	@JsonSetter("first-name")
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
@@ -65,7 +71,7 @@ public abstract class Person {
 		return lastName;
 	}
 
-
+	@JsonSetter("last-name")
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
@@ -75,8 +81,10 @@ public abstract class Person {
 	public LocalDate getBirthDate() {
 		return birthDate;
 	}
-
-
+	
+	@JsonDeserialize(using= LocalDateDeserializer.class)
+	@JsonSerialize(using= LocalDateSerializer.class)
+	@JsonSetter("birth-date")
 	public void setBirthDate(LocalDate birthDate) {
 		this.birthDate = birthDate;
 	}
@@ -86,7 +94,7 @@ public abstract class Person {
 		return nationalGovernmentId;
 	}
 
-
+	@JsonSetter("national-gvt-id")
 	public void setNationalGovernmentId(String nationalGovernmentId) {
 		this.nationalGovernmentId = nationalGovernmentId;
 	}
@@ -107,7 +115,8 @@ public abstract class Person {
 	public List<PhoneNumber> getPhoneNumbers() {
 		return phoneNumbers;
 	}
-
+	
+	@JsonSetter("phone-numbers")
 	public void setPhoneNumbers(List<PhoneNumber> phoneNumbers) {
 		this.phoneNumbers = phoneNumbers;
 	}

@@ -18,7 +18,7 @@ import org.apache.logging.log4j.Logger;
 public class GenericJaxbListParser<T> {
 	private final static Logger LOGGER = LogManager.getLogger(GenericJaxbListParser.class);
 	
-	public  List<T> jabxXmlToObject (Class<T> genericClass, String inputFilePath) {
+	public static <T> List<T> jabxXmlToObjectList (Class<T> genericClass, String inputFilePath) {
 		try {
 			JAXBContext jaxbContext = JAXBContext.newInstance(Wrapper.class, genericClass);
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
@@ -32,7 +32,7 @@ public class GenericJaxbListParser<T> {
 	}
 	
 	//@SuppressWarnings("rawtypes")
-	public void jabxObjectToXml (Class<T> genericClass, List<T> t, String outputFilePath, String collectionName) {
+	public static <T> void jabxObjectListToXml (Class<T> genericClass, List<T> t, String outputFilePath, String collectionName) {
 		try {
 			JAXBContext jaxbContext = JAXBContext.newInstance(Wrapper.class, genericClass);
 			QName qualifiedName = new QName (collectionName);

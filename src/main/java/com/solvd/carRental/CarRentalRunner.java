@@ -31,17 +31,6 @@ public class CarRentalRunner {
 	
 	public static void main(String[] args) {
 		EmployeeJaxbParser empJaxbParser = new EmployeeJaxbParser();
-		CarJaxbParser carJaxbParser = new CarJaxbParser();
-		CarModelJaxbParser carModelJaxbParser = new CarModelJaxbParser();
-		
-		//generic jaxb parser for employee
-		GenericJaxbParser<Employee> genericEmpParser = new GenericJaxbParser<Employee>();
-		
-		//generic jaxb parser for list of cars
-		GenericJaxbListParser<Car> genericCarListParser = new GenericJaxbListParser<Car>();
-		
-		//generic json parser for cars
-		GenericJsonParser<Car> carJsonParser = new GenericJsonParser<Car>();
 		
 		CustomerDAO custDao = new CustomerDAO();
 		CustomerService custService = new CustomerService();
@@ -84,25 +73,35 @@ public class CarRentalRunner {
 		
 		
 		
-		//LOGGER.info(carJaxbParser.jaxbXmlToCar());
-		
-		//LOGGER.info(carModelJaxbParser.jaxbXmlToCarModel());
 		
 		
-		LOGGER.info(empJaxbParser.jaxbXmlToEmployee());
-		LOGGER.info(genericEmpParser.jabxXmlToObject(Employee.class, "src/main/resources/employees.xml"));
+		// ------------ JAXB parser ---------
+		LOGGER.info(empJaxbParser.jaxbXmlToEmployee()); //this method retrieves only one object and doesn't work with the tag "employees"
+		LOGGER.info("Employees from XML file: "+GenericJaxbListParser.jabxXmlToObjectList(Employee.class, "src/main/resources/employees.xml"));
+		
+		List<CarModel> carModels = new ArrayList<CarModel>();
+		carModels = GenericJaxbListParser.jabxXmlToObjectList(CarModel.class, "src/main/resources/car-models.xml");
+		LOGGER.info("Car models from XML file: "+ carModels);
+		
 		
 		List<Car> cars = new ArrayList<Car>();
-		cars = genericCarListParser.jabxXmlToObject(Car.class, "src/main/resources/cars.xml");
+		cars = GenericJaxbListParser.jabxXmlToObjectList(Car.class, "src/main/resources/cars.xml");
 		LOGGER.info("Cars from XML file: "+cars);
+		GenericJaxbListParser.jabxObjectListToXml(Car.class, cars, "src/main/resources/cars-output.xml", "cars");
 		
-		//genericCarListParser.jabxObjectToXml(Car.class, cars, "src/main/resources/cars-output.xml", "cars");
-		
+		//---------- JSON parser ------------
 		List<Car> carsJson = new ArrayList<Car>();
-		carsJson = carJsonParser.jsonToObjectList("src/main/resources/cars.json");
+		carsJson = GenericJsonParser.jsonToObjectList(Car.class, "src/main/resources/cars.json");
 		LOGGER.info("Cars from JSON file:"+carsJson);
 		
-		carJsonParser.objectListToJson(carsJson, "src/main/resources/cars-output.json");
+		GenericJsonParser.objectListToJson(carsJson, "src/main/resources/cars-output.json");
+		
+		List<Employee> employeesJson = new ArrayList<Employee>();
+		employeesJson = GenericJsonParser.jsonToObjectList(Employee.class, "src/main/resources/employees.json");
+		LOGGER.info("Employees from JSON file: "+employeesJson);
+		LOGGER.info(employeesJson.get(0).getBirthDate());
+		
+		GenericJsonParser.objectListToJson(employeesJson, "src/main/resources/employees-output.json");
 	}
 
 }
