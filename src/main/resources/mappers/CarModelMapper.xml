@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "com.solvd.carRental.dao.ICarModelDAO">
+	<resultMap id="CarModelResultMap" type ="com.solvd.carRental.models.CarModel" autoMapping="false" >
+		<id property="id" column="id"/>
+		<result property="name" column="name"/>
+		<result property="description" column="description"/>
+		<result property="transmission" column="transmission"/>
+		<result property="numberOfSeats" column="number_of_seats"/>
+		<result property="airbagInfo" column="airbag_info"/>
+		<result property="luggageSpace" column="luggage_space"/>
+		<result property="fuelConsumption" column="fuel_consumption"/>
+		<result property="costPerDay" column="cost_per_day"/>
+		<association property="brand" resultMap="com.solvd.carRental.ICarBrandDAO.CarBrandResultMap"/>
+		<association property="type" resultMap="com.solvd.carRental.ICarTypeDAO.CarTypeResultMap"/>
+	</resultMap>
+	
+	<select id = "getCarModelById" resultMap="CarModelResultMap">
+	<![CDATA[
+		SELECT * FROM Car_Models cm
+		LEFT JOIN Car_Brands cb
+		ON cm.brand_id = cb.id
+		LEFT JOIN Car_Types ct
+		ON cm.type_id = ct.id
+		WHERE cm.id = #{id}
+	]]>
+	</select>
+	
+	<select id = "getAllCarModels" resultMap = "CarModelResultMap">
+	<![CDATA[
+		SELECT * FROM Cars_Models cm
+		LEFT JOIN Car_Brands cb
+		ON cm.brand_id = cb.id
+		LEFT JOIN Car_Types ct
+		ON cm.type_id = ct.id
+	]]>
+	</select>
+	
+	<insert id = "insertCarModel" useGeneratedKeys = "true" keyProperty= "id">
+	<![CDATA[
+		INSERT INTO Car_Models (name, description, transmission, number_of_seats, airbag_info, luggage_space, fuel_consumption, cost_per_day)
+		VALUES (#{name}, #{description}, #{transmission}, #{numberOfSeats}, #{airbagInfo}, #{luggageSpace}, #{fuelConsumption}, #{costPerDay})
+	]]>
+	</insert>
+	
+	<update id = "updateCarModelById">
+	<![CDATA[
+		UPDATE Cars SET
+		name = #{name},
+		description = #{description},
+		transmission = #{transmission},
+		number_of_seats = #{numberOfSeats},
+		airbag_info = #{airbagInfo},
+		luggage_space = #{luggageSpace},
+		fuel_consumption = #{fuelConsumption},
+		cost_per_day = #{costPerDay}
+		WHERE id = #{id}
+	]]>
+	</update>
+	
+	<delete id = "deleteCarModelById">
+	<![CDATA[
+		DELETE FROM Car_Models WHERE id = #{id}
+	]]>
+	</delete>
+</mapper>

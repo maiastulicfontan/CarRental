@@ -15,32 +15,36 @@
 	    <artifactId>log4j-core</artifactId>
 	    <version>2.13.2</version>
 	  </dependency>
-	<dependency>
+	  <dependency>
     	<groupId>mysql</groupId>
     	<artifactId>mysql-connector-java</artifactId>
     	<version>8.0.20</version>
-	</dependency>
-	<dependency>
+	  </dependency>
+	  <dependency>
     	<groupId>com.sun.xml.bind</groupId>
     	<artifactId>jaxb-core</artifactId>
     	<version>2.3.0.1</version>
-	</dependency>
-	<dependency>
+	  </dependency>
+	  <dependency>
     	<groupId>com.sun.xml.bind</groupId>
     	<artifactId>jaxb-impl</artifactId>
     	<version>2.4.0-b180830.0438</version>
-	</dependency>
-	<dependency>
+	  </dependency>
+	  <dependency>
     	<groupId>com.fasterxml.jackson.core</groupId>
     	<artifactId>jackson-databind</artifactId>
     	<version>2.11.0</version>
-	</dependency>
-	<dependency>
+	  </dependency>
+	  <dependency>
     	<groupId>com.fasterxml.jackson.datatype</groupId>
     	<artifactId>jackson-datatype-jsr310</artifactId>
     	<version>2.11.0</version>
-	</dependency>
-	
+	  </dependency>
+	  <dependency>
+    	<groupId>org.mybatis</groupId>
+    	<artifactId>mybatis</artifactId>
+    	<version>3.5.4</version>
+	  </dependency>
 </dependencies>
 
 <build>

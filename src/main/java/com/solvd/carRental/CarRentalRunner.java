@@ -13,6 +13,7 @@ import com.solvd.carRental.dao.mysqlimpl.CustomerDAO;
 import com.solvd.carRental.models.Car;
 import com.solvd.carRental.models.CarBrand;
 import com.solvd.carRental.models.CarModel;
+import com.solvd.carRental.models.CarType;
 import com.solvd.carRental.models.Customer;
 import com.solvd.carRental.models.Employee;
 import com.solvd.carRental.parsers.jaxb.CarJaxbParser;
@@ -24,6 +25,8 @@ import com.solvd.carRental.parsers.json.GenericJsonParser;
 import com.solvd.carRental.parsers.xmldomparser.CarModelParser;
 import com.solvd.carRental.parsers.xmldomparser.CarParser;
 import com.solvd.carRental.parsers.xmldomparser.EmployeeParser;
+import com.solvd.carRental.services.CarBrandService;
+import com.solvd.carRental.services.CarTypeService;
 import com.solvd.carRental.services.CustomerService;
 
 public class CarRentalRunner {
@@ -76,7 +79,7 @@ public class CarRentalRunner {
 		
 		
 		// ------------ JAXB parser ---------
-		LOGGER.info(empJaxbParser.jaxbXmlToEmployee()); //this method retrieves only one object and doesn't work with the tag "employees"
+		/*LOGGER.info(empJaxbParser.jaxbXmlToEmployee()); //this method retrieves only one object and doesn't work with the tag "employees"
 		LOGGER.info("Employees from XML file: "+GenericJaxbListParser.jabxXmlToObjectList(Employee.class, "src/main/resources/employees.xml"));
 		
 		List<CarModel> carModels = new ArrayList<CarModel>();
@@ -101,7 +104,17 @@ public class CarRentalRunner {
 		LOGGER.info("Employees from JSON file: "+employeesJson);
 		LOGGER.info(employeesJson.get(0).getBirthDate());
 		
-		GenericJsonParser.objectListToJson(employeesJson, "src/main/resources/employees-output.json");
+		GenericJsonParser.objectListToJson(employeesJson, "src/main/resources/employees-output.json");*/
+		
+		// ---------- MyBatis ----------
+		CarBrandService carBrandService = new CarBrandService();
+		LOGGER.info(carBrandService.getAllCarBrands());
+		
+		//CarTypeService carTypeService = new CarTypeService ();
+		//CarType carType = new CarType ("American Collection", "From the East to the West Coast, fun is guaranteed with the best of our all-american cars");
+		//carTypeService.saveCarType(carType);
+		
+		
 	}
 
 }

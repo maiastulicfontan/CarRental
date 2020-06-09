@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "com.solvd.carRental.dao.ICarTypeDAO">
+	<resultMap id="CarTypeResultMap" type="com.solvd.carRental.models.CarType" autoMapping="false">
+		<id property="id" column="id"/>
+		<result property="name" column="name"/>
+		<result property="description" column="description"/>
+	</resultMap>
+	
+	<select id = "getCarTypeById" resultMap = "CarTypeResultMap">
+	<![CDATA[
+		SELECT * FROM Car_Types ct
+		WHERE ct.id = #{id}
+	]]>
+	</select>
+	
+	<select id = "getAllCarTypes" resultMap = "CarTypeResultMap">
+	<![CDATA[
+		SELECT * FROM Car_Types
+	]]>
+	</select>
+	
+	<insert id = "insertCarType" useGeneratedKeys = "true" keyProperty= "id">
+	<![CDATA[
+		INSERT INTO Car_Types (name, description)
+		VALUES (#{name}, #{description})
+	]]>
+	</insert>
+	
+	<update id = "updateCarTypeById">
+	<![CDATA[
+		UPDATE Car_Types SET
+		name = #{name},
+		description = #{description}
+		WHERE id = #{id}
+	]]>
+	</update>
+	
+	<delete id = "deleteCarTypeById">
+	<![CDATA[
+		DELETE FROM Car_Types WHERE id = #{id}
+	]]>
+	</delete>
+</mapper>

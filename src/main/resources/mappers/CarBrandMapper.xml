@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace ="com.solvd.carRental.dao.ICarBrandDAO">
+	<resultMap id="CarBrandResultMap" type="com.solvd.carRental.models.CarBrand" autoMapping="false">
+		<id property="id" column="id"/>
+		<result property="name" column="name"/>
+	</resultMap>
+	
+	<select id="getCarBrandById" resultMap="CarBrandResultMap">
+	<![CDATA[
+		SELECT * FROM Car_Brands cb
+		WHERE cb.id = #{id}
+	]]>
+	</select>
+	
+	<select id="getAll" resultMap="CarBrandResultMap">
+	<![CDATA[
+		SELECT * FROM Car_Brands
+	]]>
+	</select>
+	
+	<insert id = "insertCarBrand" useGeneratedKeys = "true" keyProperty= "id">
+	<![CDATA[
+		INSERT INTO Car_Brands (name)
+		VALUES (#{name})
+	]]>
+	</insert>
+	
+	<update id = "updateCarBrandById">
+	<![CDATA[
+		UPDATE Car_Brands SET
+		name = #{name}
+        WHERE id = #{id}
+        ]]>
+	</update>
+	
+	<delete id = "deleteCarBrandById">
+	<![CDATA[
+        DELETE FROM Car_Brands WHERE id = #{id}
+        ]]>
+	</delete>
+</mapper>
