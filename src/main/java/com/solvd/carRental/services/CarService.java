@@ -23,7 +23,7 @@ public class CarService {
 		return car;
 	}
 	
-	public List<Car> getAllCars (Long id) {
+	public List<Car> getAllCars () {
 		List<Car> cars = new ArrayList<Car> (carDao.getAll());
 		cars.forEach(c -> this.buildCar(c));
 		return cars;

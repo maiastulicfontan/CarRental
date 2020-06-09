@@ -8,7 +8,7 @@
 		<result property="name" column="name"/>
 	</resultMap>
 	
-	<select id="getCarBrandById" resultMap="CarBrandResultMap">
+	<select id="getEntityById" resultMap="CarBrandResultMap">
 	<![CDATA[
 		SELECT * FROM Car_Brands cb
 		WHERE cb.id = #{id}
@@ -21,14 +21,14 @@
 	]]>
 	</select>
 	
-	<insert id = "insertCarBrand" useGeneratedKeys = "true" keyProperty= "id">
+	<insert id = "saveEntity" useGeneratedKeys = "true" keyProperty= "id">
 	<![CDATA[
 		INSERT INTO Car_Brands (name)
 		VALUES (#{name})
 	]]>
 	</insert>
 	
-	<update id = "updateCarBrandById">
+	<update id = "updateEntity">
 	<![CDATA[
 		UPDATE Car_Brands SET
 		name = #{name}
@@ -36,7 +36,7 @@
         ]]>
 	</update>
 	
-	<delete id = "deleteCarBrandById">
+	<delete id = "deleteEntityById">
 	<![CDATA[
         DELETE FROM Car_Brands WHERE id = #{id}
         ]]>

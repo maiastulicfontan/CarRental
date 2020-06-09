@@ -26,6 +26,7 @@ import com.solvd.carRental.parsers.xmldomparser.CarModelParser;
 import com.solvd.carRental.parsers.xmldomparser.CarParser;
 import com.solvd.carRental.parsers.xmldomparser.EmployeeParser;
 import com.solvd.carRental.services.CarBrandService;
+import com.solvd.carRental.services.CarService;
 import com.solvd.carRental.services.CarTypeService;
 import com.solvd.carRental.services.CustomerService;
 
@@ -110,11 +111,13 @@ public class CarRentalRunner {
 		CarBrandService carBrandService = new CarBrandService();
 		LOGGER.info(carBrandService.getAllCarBrands());
 		
-		//CarTypeService carTypeService = new CarTypeService ();
+		CarTypeService carTypeService = new CarTypeService ();
 		//CarType carType = new CarType ("American Collection", "From the East to the West Coast, fun is guaranteed with the best of our all-american cars");
 		//carTypeService.saveCarType(carType);
+		LOGGER.info(carTypeService.getAllCarTypes());
 		
-		
+		CarService carService = new CarService ();
+		LOGGER.info(carService.getAllCars());
 	}
 
 }

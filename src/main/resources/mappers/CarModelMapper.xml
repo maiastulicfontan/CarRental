@@ -17,7 +17,7 @@
 		<association property="type" resultMap="com.solvd.carRental.ICarTypeDAO.CarTypeResultMap"/>
 	</resultMap>
 	
-	<select id = "getCarModelById" resultMap="CarModelResultMap">
+	<select id = "getEntityById" resultMap="CarModelResultMap">
 	<![CDATA[
 		SELECT * FROM Car_Models cm
 		LEFT JOIN Car_Brands cb
@@ -28,7 +28,7 @@
 	]]>
 	</select>
 	
-	<select id = "getAllCarModels" resultMap = "CarModelResultMap">
+	<select id = "getAll" resultMap = "CarModelResultMap">
 	<![CDATA[
 		SELECT * FROM Cars_Models cm
 		LEFT JOIN Car_Brands cb
@@ -38,14 +38,14 @@
 	]]>
 	</select>
 	
-	<insert id = "insertCarModel" useGeneratedKeys = "true" keyProperty= "id">
+	<insert id = "saveEntity" useGeneratedKeys = "true" keyProperty= "id">
 	<![CDATA[
 		INSERT INTO Car_Models (name, description, transmission, number_of_seats, airbag_info, luggage_space, fuel_consumption, cost_per_day)
 		VALUES (#{name}, #{description}, #{transmission}, #{numberOfSeats}, #{airbagInfo}, #{luggageSpace}, #{fuelConsumption}, #{costPerDay})
 	]]>
 	</insert>
 	
-	<update id = "updateCarModelById">
+	<update id = "updateEntity">
 	<![CDATA[
 		UPDATE Cars SET
 		name = #{name},
@@ -60,7 +60,7 @@
 	]]>
 	</update>
 	
-	<delete id = "deleteCarModelById">
+	<delete id = "deleteEntityById">
 	<![CDATA[
 		DELETE FROM Car_Models WHERE id = #{id}
 	]]>

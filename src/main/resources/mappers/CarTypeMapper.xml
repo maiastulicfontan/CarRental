@@ -9,27 +9,27 @@
 		<result property="description" column="description"/>
 	</resultMap>
 	
-	<select id = "getCarTypeById" resultMap = "CarTypeResultMap">
+	<select id = "getEntityById" resultMap = "CarTypeResultMap">
 	<![CDATA[
 		SELECT * FROM Car_Types ct
 		WHERE ct.id = #{id}
 	]]>
 	</select>
 	
-	<select id = "getAllCarTypes" resultMap = "CarTypeResultMap">
+	<select id = "getAll" resultMap = "CarTypeResultMap">
 	<![CDATA[
 		SELECT * FROM Car_Types
 	]]>
 	</select>
 	
-	<insert id = "insertCarType" useGeneratedKeys = "true" keyProperty= "id">
+	<insert id = "saveEntity" useGeneratedKeys = "true" keyProperty= "id">
 	<![CDATA[
 		INSERT INTO Car_Types (name, description)
 		VALUES (#{name}, #{description})
 	]]>
 	</insert>
 	
-	<update id = "updateCarTypeById">
+	<update id = "updateEntity">
 	<![CDATA[
 		UPDATE Car_Types SET
 		name = #{name},
@@ -38,7 +38,7 @@
 	]]>
 	</update>
 	
-	<delete id = "deleteCarTypeById">
+	<delete id = "deleteEntityById">
 	<![CDATA[
 		DELETE FROM Car_Types WHERE id = #{id}
 	]]>

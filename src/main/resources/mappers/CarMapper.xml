@@ -11,7 +11,7 @@
 		<association property="model" resultMap="com.solvd.carRental.ICarModelDAO.CarModelResultMap"/>
 	</resultMap>
 	
-	<select id = "getCarById" resultMap = "CarResultMap">
+	<select id = "getEntityById" resultMap = "CarResultMap">
 	<![CDATA[
 		SELECT * FROM Cars c
 		INNER JOIN Car_Models cm
@@ -20,7 +20,7 @@
 	]]>
 	</select>
 	
-	<select id = "getAllCars" resultMap = "CarResultMap">
+	<select id = "getAll" resultMap = "CarResultMap">
 	<![CDATA[
 		SELECT * FROM Cars c
 		LEFT JOIN Car_Models cm
@@ -28,14 +28,14 @@
 	]]>
 	</select>
 	
-	<insert id = "insertCar" useGeneratedKeys = "true" keyProperty= "id">
+	<insert id = "saveEntity" useGeneratedKeys = "true" keyProperty= "id">
 	<![CDATA[
 		INSERT INTO Cars (license_plate, model_year, color)
 		VALUES (#{licensePlate}, #{modelYear}, #{color})
 	]]>
 	</insert>
 	
-	<update id = "updateCarById">
+	<update id = "updateEntity">
 	<![CDATA[
 		UPDATE Cars SET
 		license_plate = #{licensePlate},
@@ -45,7 +45,7 @@
 	]]>
 	</update>
 	
-	<delete id = "deleteCarById">
+	<delete id = "deleteEntityById">
 	<![CDATA[
 		DELETE FROM Cars WHERE id = #{id}
 	]]>
